@@ -1,4 +1,5 @@
 import cairo
+import math
 
 
 class _LAYER_():
@@ -21,17 +22,18 @@ class _LAYER_():
         self._ctx_.rectangle(0, 0, self._width_, self._height_)
         if self._gradient_:
             # (Simplified gradient logic for demo)
+            
             pat = cairo.RadialGradient(self._width_/2,
                                        
                                        self._height_/2,
 
-                                       self._width_*self._height_/15000,
+                                       math.sqrt(3*self._width_*self._height_/(math.pi*765)),
                                        
                                        self._width_/2,
 
                                        self._height_/2,
 
-                                       self._width_*self._height_/1000)
+                                       math.sqrt(3*self._width_*self._height_/(math.pi*1.77)))
 
             pat.add_color_stop_rgba(0,
                                     self._color_[0],
@@ -72,13 +74,13 @@ class _LAYER_():
                                        
                                        self._height_/2,
 
-                                       self._width_*self._height_/15000,
+                                       math.sqrt(3*self._width_*self._height_/(math.pi*765)),
                                        
                                        self._width_/2,
 
                                        self._height_/2,
 
-                                       self._width_*self._height_/1000)
+                                       math.sqrt(3*self._width_*self._height_/(math.pi*1.77)))
 
             pat.add_color_stop_rgba(0,
                                     self._color_[0],
