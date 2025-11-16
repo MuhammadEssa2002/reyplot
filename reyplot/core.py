@@ -34,7 +34,22 @@ class OuterLayer:
         from .layer import _LAYER_
         _LAYER_(properties=self,context=ctx,width=width,height=height)
 
-
+class ScatterPlot:
+    def __init__(self,
+                 x,
+                 y,
+                 color,
+                 color_range,
+                 size,
+                 size_range,
+                 gradient,
+                 gradient_color,
+                 alpha,
+                 edge_size,
+                 style_range,
+                 outer_layer_size,
+                 plot_size):
+        pass
 
 class chart:
     """
