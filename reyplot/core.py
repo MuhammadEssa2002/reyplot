@@ -38,18 +38,14 @@ class ScatterPlot:
     def __init__(self,
                  x,
                  y,
-                 color,
-                 color_range,
-                 size,
-                 size_range,
-                 gradient,
-                 gradient_color,
-                 alpha,
-                 edge_size,
-                 style_range,
-                 outer_layer_size,
-                 plot_size):
-        pass
+                 color):
+        self.X_data = x
+        self.Y_data = y
+        self.scatter_color = color
+
+        
+    def draw(self,ctx,width,height):
+        print("hello")
 
 class chart:
     """
