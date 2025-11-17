@@ -7,6 +7,9 @@ import os
 # Importing the utility functions
 from .utility import __hex_to_rgb_rey__
 
+# Importing the Validators for error handling
+from .validators import validate_limits
+
 
 class InnerLayer:
     def __init__(self, color, gradient, gradient_color, alpha):
@@ -43,7 +46,7 @@ class ScatterPlot:
         self.Y_data = y
         self.scatter_color = color
 
-        
+
     def draw(self,ctx,width,height):
         print("hello")
 
@@ -89,6 +92,17 @@ class chart:
         self._MATUAL_OUTER_LAYER_GRADIENT_ = gradient
         self._MATUAL_OUTER_LAYER_GRADIENT_COLOR_ = gradient_color
         self._MATUAL_OUTER_LAYER_ALPHA_ = alpha
+    
+    # User define Limts for X-Axis
+    def x_lim(self,limits):
+        validate_limits(limits,"X")
+        self._OUTER_LAYER_POSTION_.user_x_limit(limits)
+    
+    # User define Limts for X-Axis
+    def y_lim(self,limits):
+        validate_limits(limits,"Y")
+        self._OUTER_LAYER_POSTION_.use_y_limit(limits)
+
 
     def _create_surface(self):
         """Helper to set up the Cairo surface and context."""
