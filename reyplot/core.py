@@ -166,15 +166,15 @@ class chart:
         surface, ctx = self._create_surface()
         self._draw_layers(ctx)
 
-        # --- This is your exact Tkinter logic from _MAKE_REY_ ---
-        # It works perfectly here.
+       
+       
         _BUFFER_ = io.BytesIO()
         surface.write_to_png(_BUFFER_)
         _BUFFER_.seek(0)
 
         _IMAGE_ = Image.open(_BUFFER_)
         _ROOT_ = tkinter.Tk()
-        _ROOT_.title("ReyPlot (OOP Demo)")
+        _ROOT_.title("ReyPlot")
 
         # (Icon logic omitted for demo)
         
@@ -184,12 +184,6 @@ class chart:
         _ROOT_.mainloop()
 
 
-# --- EXAMPLE OF HOW TO USE THE NEW OOP-BASED LIBRARY ---
+
 if __name__ == "__main__":
-    
-    fig = chart(size=[1000, 700])
-
-   
-    fig.inner_layer(color="#9A0000",gradient=True)
-
-    fig.show()
+    pass
