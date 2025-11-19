@@ -38,17 +38,26 @@ class OuterLayer:
         _LAYER_(properties=self,context=ctx,width=width,height=height)
 
 class ScatterPlot:
-    def __init__(self,
+    def __init__(self
+                 ,data,
                  x,
                  y,
                  color):
+        self.data = data
         self.X_data = x
         self.Y_data = y
         self.scatter_color = color
+        self.postions = None
+        self.limts = None
 
 
     def draw(self,ctx,width,height):
         print("hello")
+
+
+
+
+
 
 class chart:
     """
@@ -73,6 +82,14 @@ class chart:
 
         self.inner_layer(color="#C0C0C0")
 
+
+
+
+
+
+
+
+
     # This is inner layer method which takes mantual data from user
     def inner_layer(self, color="#C0C0C0", gradient=False, gradient_color="#000000", alpha=1):
         """Creates an InnerLayer object and adds it to our layer list."""
@@ -84,6 +101,14 @@ class chart:
                 return
         self.layers.append(layer)
 
+
+
+
+
+
+
+
+
     # This is outer layer method which takes mantual data from user
     def outer_layer(self, color="#C0C0C0", gradient=False, gradient_color="#000000", alpha=1):
         """Creates an InnerLayer object and adds it to our layer list."""
@@ -92,7 +117,14 @@ class chart:
         self._MATUAL_OUTER_LAYER_GRADIENT_ = gradient
         self._MATUAL_OUTER_LAYER_GRADIENT_COLOR_ = gradient_color
         self._MATUAL_OUTER_LAYER_ALPHA_ = alpha
-    
+
+
+
+
+
+
+
+
     # User define Limts for X-Axis
     def x_lim(self,limits):
         validate_limits(limits,"X")
@@ -102,6 +134,22 @@ class chart:
     def y_lim(self,limits):
         validate_limits(limits,"Y")
         self._OUTER_LAYER_POSTION_.use_y_limit(limits)
+
+
+
+
+
+
+
+    # Creating the scatterPlot method where user can define the main data and columns to work on!
+    def scatter(self,data,x,y,color):
+        from .converters import to_polars
+        layer = ScatterPlot()
+
+
+
+
+
 
 
     def _create_surface(self):
@@ -124,6 +172,14 @@ class chart:
             ctx.paint()
             
         return surface, ctx
+
+
+
+
+
+
+
+
 
     def _draw_layers(self, ctx):
         """Helper to loop through all layers and tell them to draw."""
@@ -154,12 +210,31 @@ class chart:
         for layer in self.layers:
             layer.draw(ctx, self.width, self.height)
 
+
+
+
+
+
+
+
+
+
     def save(self, name="reyplot"):
         """Saves the figure to a PNG file."""
         surface, ctx = self._create_surface()
         self._draw_layers(ctx)
         
         surface.write_to_png(f"{name}.png")
+
+
+
+
+
+
+
+
+
+
 
     def show(self):
         """Displays the figure in a new Tkinter window."""

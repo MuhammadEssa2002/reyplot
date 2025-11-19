@@ -1,8 +1,8 @@
-import reyplot as rp
+import reyplot as re
 
-fig = rp.chart()
 
-fig.x_lim([2,"tt"])
+data = re.load_dataset("iris")
 
-fig.show()
+print(data.head())
+
 
