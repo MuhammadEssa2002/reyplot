@@ -42,18 +42,26 @@ class ScatterPlot:
                  ,data,
                  x,
                  y,
-                 color):
+                 color,
+                 alpha):
         self.data = data
-        self.X_data = x
-        self.Y_data = y
-        self.scatter_color = color
+        self.X_data = self.data.select(x).to_series()
+        self.Y_data = self.data.select(y).to_series()
+        self.scatter_color = __hex_to_rgb_rey__(color)
+        self.alpha = alpha
         self.postions = None
-        self.limts = None
+        self.limits = None
 
 
     def draw(self,ctx,width,height):
-        print("hello")
-
+        from .scatter_plot import _Draw_Scatter_
+        _Draw_Scatter_(self,ctx,width,height)
+    
+    def update_limts(self,lims):
+        self.limits = lims
+    
+    def update_postions(self,pos):
+        self.postions = pos
 
 
 
@@ -142,9 +150,20 @@ class chart:
 
 
     # Creating the scatterPlot method where user can define the main data and columns to work on!
-    def scatter(self,data,x,y,color):
+    def scatter(self,data,x,y,color = "maroon",alpha = 0.7):
+        from .validators import validate_data
+        validate_data(data)
+
         from .converters import to_polars
-        layer = ScatterPlot()
+        data = to_polars(data)
+        data = data.drop_nans()
+
+        layer = ScatterPlot(data,x,y,color,alpha)
+        self.layers.append(layer)
+
+        self._OUTER_LAYER_POSTION_.update_min_max_x(data.select(x))
+        self._OUTER_LAYER_POSTION_.update_min_max_y(data.select(y))
+        
 
 
 
@@ -205,6 +224,10 @@ class chart:
                 self.layers.append(layer)
 
 
+        for layer in self.layers:
+            if isinstance(layer, ScatterPlot):
+                layer.update_limts(self._OUTER_LAYER_POSTION_.limits())
+                layer.update_postions(self._OUTER_LAYER_POSTION_.postion())
 
 
         for layer in self.layers:

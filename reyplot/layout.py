@@ -18,111 +18,140 @@ class OuterLayerPostion:
         self.user_x_lim = False
         self.user_y_lim = False
 
-    # For Updating the Width of the outer layer
+    # Width update
     def update_width(self, new_width):
         self.width = new_width
 
-    # For Updating the Height of the outer layer
+    # Height update
     def update_height(self, new_height):
         self.height = new_height
 
-    # Control starting pixel of x-axis
+    # X1 block
     def update_x1(self, padding):
         self._OUTER_LAYER_FIRST_BLOCK_POSTION_ = -self.width / padding
 
-    # Control ending pixel of x-axis
+    # X2 block
     def update_x2(self, padding):
         self._OUTER_LAYER_SECOND_BLOCK_POSTION_ = self.width / 2 + self.width / padding
 
-    # Control starting (upper) pixel of y-axis
+    # Y1 block
     def update_y1(self, padding):
         self._OUTER_LAYER_THIRD_BLOCK_POSTION_ = -self.height / padding
 
-    # Control ending (lower) pixel of y-axis
+    # Y2 block
     def update_y2(self, padding):
         self._OUTER_LAYER_FOURTH_BLOCK_POSTION_ = self.height / 2 + self.height / padding
 
-    # Return pixel postions
+    # All positions
     def postion(self):
         return (
             self.width / 2 + self._OUTER_LAYER_FIRST_BLOCK_POSTION_,
             self._OUTER_LAYER_SECOND_BLOCK_POSTION_,
-            self.height / 2 + self._OUTER_LAYER_THIRD_BLOCK_POSTION_,
             self._OUTER_LAYER_FOURTH_BLOCK_POSTION_,
+            self.height / 2 + self._OUTER_LAYER_THIRD_BLOCK_POSTION_
         )
+    #self._OUTER_LAYER_FOURTH_BLOCK_POSTION_
+    #self.height / 2 + self._OUTER_LAYER_THIRD_BLOCK_POSTION_
 
-    # Update min/max for x
-    def update_min_max_x(self, column: pl.Series):
-        if not self.user_x_lim:
+    # ------------------------------
+    # SAFE SERIES EXTRACTOR
+    # ------------------------------
+    def _ensure_series(self, col):
+        """Convert DataFrame → Series if needed."""
+        if isinstance(col, pl.DataFrame):
+            return col.to_series()
+        return col
 
-            if len(column) == 0:   # Polars version of .empty
-                return
+    # ------------------------------
+    # UPDATE X LIMITS
+    # ------------------------------
+    def update_min_max_x(self, column):
+        column = self._ensure_series(column)
 
-            col_min = column.min()
-            col_max = column.max()
+        if self.user_x_lim:
+            return
 
-            old_min = self.min_x_lim
-            old_max = self.max_x_lim
+        if column.is_empty():
+            return
 
-            # First initialization
-            if self.min_x_lim is None:
-                self.min_x_lim = col_min
-                self.max_x_lim = col_max
-            else:
-                self.min_x_lim = min(self.min_x_lim, col_min)
-                self.max_x_lim = max(self.max_x_lim, col_max)
+        col_min = column.min()
+        col_max = column.max()
 
-            # 25% padding
-            distance = self.max_x_lim - self.min_x_lim
-            padding = 0.25 * distance
+        first_update = (self.min_x_lim is None)
 
-            # Only change max if updated
-            if old_max != self.max_x_lim:
-                self.max_x_lim = self.max_x_lim + padding
+        old_max = self.max_x_lim
 
-    # Update min/max for y
-    def update_min_max_y(self, column: pl.Series):
-        if not self.user_y_lim:
+        # First initialization
+        if first_update:
+            self.min_x_lim = col_min
+            self.max_x_lim = col_max
+        else:
+            self.min_x_lim = min(self.min_x_lim, col_min)
+            self.max_x_lim = max(self.max_x_lim, col_max)
 
-            if len(column) == 0:   # Polars version of .empty
-                return
+        # Padding
+        distance = self.max_x_lim - self.min_x_lim
+        padding = 0.05 * distance
 
-            col_min = column.min()
-            col_max = column.max()
+        # Only add padding if max changed (avoid double-padding)
+        if first_update or old_max != self.max_x_lim:
+            self.max_x_lim += padding
 
-            old_min = self.min_y_lim
-            old_max = self.max_y_lim
+    # ------------------------------
+    # UPDATE Y LIMITS
+    # ------------------------------
+    def update_min_max_y(self, column):
+        column = self._ensure_series(column)
 
-            # First initialization
-            if self.min_y_lim is None:
-                self.min_y_lim = col_min
-                self.max_y_lim = col_max
-            else:
-                self.min_y_lim = min(self.min_y_lim, col_min)
-                self.max_y_lim = max(self.max_y_lim, col_max)
+        if self.user_y_lim:
+            return
 
-            # 25% padding
-            distance = self.max_y_lim - self.min_y_lim
-            padding = 0.25 * distance
+        if column.is_empty():
+            return
 
-            if old_min != self.min_y_lim:
-                self.min_y_lim = self.min_y_lim - padding
+        col_min = column.min()
+        col_max = column.max()
 
-            if old_max != self.max_y_lim:
-                self.max_y_lim = self.max_y_lim + padding
+        first_update = (self.min_y_lim is None)
 
-    # User-defined x limits
+        old_min = self.min_y_lim
+        old_max = self.max_y_lim
+
+        # First initialization
+        if first_update:
+            self.min_y_lim = col_min
+            self.max_y_lim = col_max
+        else:
+            self.min_y_lim = min(self.min_y_lim, col_min)
+            self.max_y_lim = max(self.max_y_lim, col_max)
+
+        # Padding
+        distance = self.max_y_lim - self.min_y_lim
+        padding = 0.05 * distance
+
+        # Apply padding only when values changed
+        if first_update or old_min != self.min_y_lim:
+            self.min_y_lim -= padding
+
+        if first_update or old_max != self.max_y_lim:
+            self.max_y_lim += padding
+
+    # ------------------------------
+    # USER LIMITS
+    # ------------------------------
     def user_x_limit(self, lim):
         self.min_x_lim = lim[0]
         self.max_x_lim = lim[1]
         self.user_x_lim = True
 
-    # User-defined y limits
     def use_y_limit(self, lim):
         self.min_y_lim = lim[0]
         self.max_y_lim = lim[1]
         self.user_y_lim = True
 
-    # Get limits
+    # ------------------------------
+    # GET LIMITS
+    # ------------------------------
     def limits(self):
         return (self.min_x_lim, self.max_x_lim, self.min_y_lim, self.max_y_lim)
+
