@@ -11,6 +11,9 @@ from .utility import __hex_to_rgb_rey__
 from .validators import validate_limits
 
 
+
+
+
 class InnerLayer:
     def __init__(self, color, gradient, gradient_color, alpha):
         self.color = __hex_to_rgb_rey__(color)
@@ -22,6 +25,12 @@ class InnerLayer:
     def draw(self, ctx, width, height):
         from .layer import _LAYER_
         _LAYER_(properties=self,context=ctx,width=width,height=height)
+
+
+
+
+
+
 
 
 class OuterLayer:
@@ -37,6 +46,13 @@ class OuterLayer:
         from .layer import _LAYER_
         _LAYER_(properties=self,context=ctx,width=width,height=height)
 
+
+
+
+
+
+
+
 class ScatterPlot:
     def __init__(self
                  ,data,
@@ -44,13 +60,15 @@ class ScatterPlot:
                  y,
                  color,
                  stroke_size,
-                 alpha):
+                 alpha,
+                 stroke_gradient):
         self.data = data
         self.X_data = self.data.select(x).to_series()
         self.Y_data = self.data.select(y).to_series()
         self.scatter_color = __hex_to_rgb_rey__(color)
         self.stroke_size = stroke_size
         self.alpha = alpha
+        self.stroke_gradient = stroke_gradient
         self.postions = None
         self.limits = None
 
@@ -69,6 +87,25 @@ class ScatterPlot:
 
 
 
+
+class Axes:
+    def __init__(self,postions,limits,color,style,alpha):
+        self.postions = postions
+        self.limits = limits
+        self.color = __hex_to_rgb_rey__(color)
+        self.style = style
+        self.alpha = alpha
+
+    def draw(self,ctx,width,height):
+        from .axes import Draw_Axes
+        Draw_Axes(self,ctx,width,height)
+
+
+
+
+
+
+
 class chart:
     """
     The main Figure object.
@@ -77,8 +114,18 @@ class chart:
     """
     def __init__(self, size=[900, 600], scale=1):
         # Store figure properties
-        self.width = size[0]
-        self.height = size[1]
+        self.orignal_width = size[0]
+        self.orignal_height = size[1]
+        if (self.orignal_width < 500):
+            self.width = size[0] * 10
+        else:
+            self.width = size[0]
+
+        if (self.orignal_height < 500):
+                self.height = size[1] * 10
+        else:
+            self.height = size[1]
+        
         self.scale = scale
         self.background_image_path = None
         
@@ -90,7 +137,10 @@ class chart:
         self._OUTER_LAYER_FLAG_ = False
         self._MATUAL_ACTIVE_OUTER_LAYER_ = False
 
-        self.inner_layer(color="#C0C0C0")
+        self.inner_layer(color="#E3E3E3")
+        
+        self.axes_flag = False
+        self.axes()
 
 
 
@@ -101,7 +151,7 @@ class chart:
 
 
     # This is inner layer method which takes mantual data from user
-    def inner_layer(self, color="#C0C0C0", gradient=False, gradient_color="#000000", alpha=1):
+    def inner_layer(self, color="#E3E3E3", gradient=False, gradient_color="#000000", alpha=1):
         """Creates an InnerLayer object and adds it to our layer list."""
         layer = InnerLayer(color, gradient, gradient_color, alpha)
         # Check if an inner layer already exists
@@ -120,7 +170,7 @@ class chart:
 
 
     # This is outer layer method which takes mantual data from user
-    def outer_layer(self, color="#C0C0C0", gradient=False, gradient_color="#000000", alpha=1):
+    def outer_layer(self, color="#E3E3E3", gradient=False, gradient_color="#000000", alpha=1):
         """Creates an InnerLayer object and adds it to our layer list."""
         self._MATUAL_ACTIVE_OUTER_LAYER_ = True
         self._MATUAL_OUTER_LAYER_COLOR_ = color
@@ -152,7 +202,7 @@ class chart:
 
 
     # Creating the scatterPlot method where user can define the main data and columns to work on!
-    def scatter(self,data,x,y,color = "maroon",alpha = 0.7,stroke_size = 1):
+    def scatter(self,data,x,y,color = "maroon",alpha = 0.7,stroke_size = 1,stroke_gradient=False):
         from .validators import validate_data
         validate_data(data)
 
@@ -160,12 +210,17 @@ class chart:
         data = to_polars(data)
         data = data.drop_nans()
 
-        layer = ScatterPlot(data=data,x=x,y=y,color=color,alpha=alpha,stroke_size=stroke_size)
+        layer = ScatterPlot(data=data,x=x,y=y,color=color,alpha=alpha,stroke_size=stroke_size,stroke_gradient=stroke_gradient)
         self.layers.append(layer)
 
         self._OUTER_LAYER_POSTION_.update_min_max_x(data.select(x))
         self._OUTER_LAYER_POSTION_.update_min_max_y(data.select(y))
         
+
+
+
+
+
 
 
 
@@ -197,7 +252,11 @@ class chart:
 
 
 
-
+    # Creating the Axes class
+    def axes(self,color="black",style="two_lines",alpha = 1):
+        self.axes_color = color
+        self.axes_style = style
+        self.axes_alpha = alpha
 
 
 
@@ -205,6 +264,8 @@ class chart:
     def _draw_layers(self, ctx):
         """Helper to loop through all layers and tell them to draw."""
         
+
+        #Creating the outer_layer
         if not (self._OUTER_LAYER_FLAG_):
             if (self._MATUAL_ACTIVE_OUTER_LAYER_):
                 self._OUTER_LAYER_FLAG_ = True
@@ -217,7 +278,7 @@ class chart:
                 self.layers.append(layer)
             else:
                 self._OUTER_LAYER_FLAG_ = True
-                layer = OuterLayer(color="#C0C0C0",
+                layer = OuterLayer(color="#E3E3E3",
                            gradient=False,
                            gradient_color="#000000",
                            alpha=1,
@@ -226,10 +287,22 @@ class chart:
                 self.layers.append(layer)
 
 
+        #Updating the scatter_plot
         for layer in self.layers:
             if isinstance(layer, ScatterPlot):
                 layer.update_limts(self._OUTER_LAYER_POSTION_.limits())
                 layer.update_postions(self._OUTER_LAYER_POSTION_.postion())
+
+
+        #Creating the axes
+        layer = Axes(self._OUTER_LAYER_POSTION_.postion(),
+                     self._OUTER_LAYER_POSTION_.limits(),
+                     self.axes_color,
+                     self.axes_style,
+                     self.axes_alpha
+                     )
+        self.layers.append(layer)
+
 
 
         for layer in self.layers:
@@ -248,8 +321,14 @@ class chart:
         """Saves the figure to a PNG file."""
         surface, ctx = self._create_surface()
         self._draw_layers(ctx)
-        
-        surface.write_to_png(f"{name}.png")
+
+        _BUFFER_ = io.BytesIO()
+        surface.write_to_png(_BUFFER_)
+        _BUFFER_.seek(0)
+
+        _IMAGE_ = Image.open(_BUFFER_)
+        _IMAGE_ = _IMAGE_.resize((self.orignal_width, self.orignal_height), Image.LANCZOS)
+        _IMAGE_.save(f"{name}.png")
 
 
 
@@ -273,10 +352,9 @@ class chart:
         _BUFFER_.seek(0)
 
         _IMAGE_ = Image.open(_BUFFER_)
+        _IMAGE_ = _IMAGE_.resize((round(self.orignal_width/1.5), round(self.orignal_height/1.5)), Image.LANCZOS)
         _ROOT_ = tkinter.Tk()
         _ROOT_.title("ReyPlot")
-
-        # (Icon logic omitted for demo)
         
         _TK_IMAGE_ = ImageTk.PhotoImage(_IMAGE_)
         label = tkinter.Label(_ROOT_, image=_TK_IMAGE_)
