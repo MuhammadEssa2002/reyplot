@@ -29,14 +29,14 @@ class _Draw_Scatter_():
         
 
         for i in range(len(self.x_pixels)):
-            self._ctx_.arc(self.x_pixels[i] , self.y_pixels[i]  , 5 , 0, 2 * math.pi)
+            self._ctx_.arc(self.x_pixels[i] , self.y_pixels[i]  , math.sqrt(3*self.width*self.height/(math.pi*20000)) , 0, 2 * math.pi)
             self._ctx_.set_source_rgba(self.properties.scatter_color[0],
                                        self.properties.scatter_color[1],
                                        self.properties.scatter_color[2],
                                        self.properties.alpha)
             self._ctx_.fill_preserve()
 
-            self._ctx_.set_line_width(1) 
+            self._ctx_.set_line_width(self.properties.stroke_size) 
             self._ctx_.set_source_rgb(self.properties.scatter_color[0],
                                        self.properties.scatter_color[1],
                                        self.properties.scatter_color[2]

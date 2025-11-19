@@ -43,11 +43,13 @@ class ScatterPlot:
                  x,
                  y,
                  color,
+                 stroke_size,
                  alpha):
         self.data = data
         self.X_data = self.data.select(x).to_series()
         self.Y_data = self.data.select(y).to_series()
         self.scatter_color = __hex_to_rgb_rey__(color)
+        self.stroke_size = stroke_size
         self.alpha = alpha
         self.postions = None
         self.limits = None
@@ -150,7 +152,7 @@ class chart:
 
 
     # Creating the scatterPlot method where user can define the main data and columns to work on!
-    def scatter(self,data,x,y,color = "maroon",alpha = 0.7):
+    def scatter(self,data,x,y,color = "maroon",alpha = 0.7,stroke_size = 1):
         from .validators import validate_data
         validate_data(data)
 
@@ -158,7 +160,7 @@ class chart:
         data = to_polars(data)
         data = data.drop_nans()
 
-        layer = ScatterPlot(data,x,y,color,alpha)
+        layer = ScatterPlot(data=data,x=x,y=y,color=color,alpha=alpha,stroke_size=stroke_size)
         self.layers.append(layer)
 
         self._OUTER_LAYER_POSTION_.update_min_max_x(data.select(x))

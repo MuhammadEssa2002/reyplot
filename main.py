@@ -16,7 +16,7 @@ data = re.load_dataset("iris")
 
 
 chaart = re.chart()
-chaart.inner_layer()
+chaart.inner_layer(color="sky")
 # chaart.scatter(data,x = "sepal_length",y = "sepal_width")
 chaart.scatter(data,x = "sepal_length",y = "sepal_width")
 
