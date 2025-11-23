@@ -4,6 +4,7 @@ import math
 class _Draw_Scatter_():
     def __init__(self,properties,context,width,height):
         from .pixel_mapper import map_polars_to_pixels
+        from .canvas import calculate_dynamic_radius
 
         self.properties = properties
         self._ctx_ = context
@@ -27,9 +28,10 @@ class _Draw_Scatter_():
             self.properties.postions[3]
         )
         
+        dot_radius = calculate_dynamic_radius(self.width,self.height,len(self.x_pixels),self.properties.dot_size)
 
         for i in range(len(self.x_pixels)):
-            self._ctx_.arc(self.x_pixels[i] , self.y_pixels[i]  , math.sqrt(3*self.width*self.height/(math.pi*20000)) , 0, 2 * math.pi)
+            self._ctx_.arc(self.x_pixels[i] , self.y_pixels[i]  , dot_radius , 0, 2 * math.pi)
             self._ctx_.set_source_rgba(self.properties.scatter_color[0],
                                        self.properties.scatter_color[1],
                                        self.properties.scatter_color[2],
