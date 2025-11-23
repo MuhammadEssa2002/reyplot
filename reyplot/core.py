@@ -118,15 +118,18 @@ class chart:
         # Store figure properties
         self.orignal_width = size[0]
         self.orignal_height = size[1]
-        if (self.orignal_width < 500):
-            self.width = size[0] * 10
-        else:
-            self.width = size[0]
+        # if (self.orignal_width < 500):
+        #     self.width = size[0] * 10
+        # else:
+        #     self.width = size[0]
 
-        if (self.orignal_height < 500):
-                self.height = size[1] * 10
-        else:
-            self.height = size[1]
+        # if (self.orignal_height < 500):
+        #         self.height = size[1] * 10
+        # else:
+        #     self.height = size[1]
+
+        self.width = self.orignal_width
+        self.height = self.orignal_height
         
         self.scale = scale
         self.background_image_path = None

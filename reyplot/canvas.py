@@ -21,7 +21,7 @@ def calculate_dynamic_radius(surface_width, surface_height, num_points,size):
     # 4. Clamping (Optional but recommended)
     # Enforce a minimum pixel size so dots remain visible on high-res screens
     # Enforce a maximum size so single points don't dominate
-    min_pixel_size = 4*size  # Minimum visible size
+    min_pixel_size = 6*size  # Minimum visible size
     max_pixel_size = canvas_diagonal * 0.05 # Max 5% of screen
     
     final_radius = max(min_pixel_size, min(raw_radius, max_pixel_size))
