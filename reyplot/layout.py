@@ -6,7 +6,7 @@ class OuterLayerPostion:
         self.height = height
 
         self._OUTER_LAYER_FIRST_BLOCK_POSTION_ = -self.width / 2.5
-        self._OUTER_LAYER_SECOND_BLOCK_POSTION_ = self.width / 2 + self.width / 2.1
+        self._OUTER_LAYER_SECOND_BLOCK_POSTION_ = self.width / 2 + self.width / 2.3
         self._OUTER_LAYER_THIRD_BLOCK_POSTION_ = -self.height / 2.1
         self._OUTER_LAYER_FOURTH_BLOCK_POSTION_ = self.height / 2 + self.height / 2.5
 

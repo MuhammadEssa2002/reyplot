@@ -4,8 +4,10 @@ from .polar import ls
 from .pixel_mapper import map_polars_to_pixels
 
 
-def calculate_ticks(position,limits,num_ticks):
-    x_ticks_values = ls(limits[0],limits[1],num_ticks)
+
+## For calculating the tics postions and values
+def calculate_ticks(position,limits,x_tic,y_tic):
+    x_ticks_values = ls(limits[0],limits[1],x_tic)
     x_ticks = map_polars_to_pixels(
             x_ticks_values,
             limits[0],
@@ -13,7 +15,7 @@ def calculate_ticks(position,limits,num_ticks):
             position[0],
             position[1]
         )
-    y_ticks_values = ls(limits[2],limits[3],num_ticks)
+    y_ticks_values = ls(limits[2],limits[3],y_tic)
     y_ticks = map_polars_to_pixels(
             y_ticks_values,
             limits[2],
@@ -26,23 +28,43 @@ def calculate_ticks(position,limits,num_ticks):
 
 
 
-def draw_ticks(_ctx_,snap,position,limits,line_width):
-    ticks = calculate_ticks(position=position,limits=limits,num_ticks=4)
+
+## For Creating the tics and text on the axes
+def draw_ticks(_ctx_,snap,position,limits,line_width,width,height,color,alpha,x_tic,y_tic):
+    ticks = calculate_ticks(position=position, limits=limits, x_tic=x_tic, y_tic=y_tic)
+    len_tick_height = height * 0.01
+    font_size = math.sqrt(width**2 + height**2)/80
 
     for i in range(len(ticks[0])):
         _ctx_.set_line_width(line_width)
-        _ctx_.set_source_rgb(0, 0, 0)
+        _ctx_.set_source_rgba(color[0], color[1], color[2],alpha)
         _ctx_.move_to(snap(ticks[0][i]),
-                      snap(position[2])
+                      snap(position[2]-len_tick_height)
                       )
         
         _ctx_.line_to(snap(ticks[0][i]),
-                      snap(1.05*position[2])
+                      snap(position[2]+len_tick_height)
         )
+        _ctx_.stroke()
+
+        # Ticks values 
+        _ctx_.select_font_face("Sans", cairo.FONT_SLANT_NORMAL)
+        _ctx_.set_font_size(font_size)
+        _ctx_.set_source_rgba(color[0], color[1], color[2],alpha)
+        extents = _ctx_.text_extents("{:.2f}".format(ticks[2][i]))
+        
+        text_width = extents.width
+        text_height = extents.height
+
+        _ctx_.move_to(snap(ticks[0][i]) - text_width/2 , snap(position[2]+len_tick_height) + text_height )
+        _ctx_.show_text("{:.2f}".format(ticks[2][i]))
         _ctx_.stroke()
 
 
 
+
+
+## Main Class for Creating the axes
 class Draw_Axes:
     def __init__(self, properties, context, width, height):
         self.properties = properties
@@ -59,7 +81,7 @@ class Draw_Axes:
         # Turn off Anti-aliasing for binary (crisp) pixels
         self._ctx_.set_antialias(cairo.Antialias.NONE)
         self._ctx_.set_line_width(self.line_width)
-        self._ctx_.set_source_rgb(self.properties.color[0], self.properties.color[1], self.properties.color[2])
+        self._ctx_.set_source_rgba(self.properties.color[0], self.properties.color[1], self.properties.color[2],self.properties.alpha)
 
         # FIX 2: Pixel Snapping Helper
         # This ensures the line hits the center of the pixel (x.5)
@@ -95,5 +117,15 @@ class Draw_Axes:
 
         # Restore Anti-aliasing for future shapes drawn after this class finishes
 
-        draw_ticks(self._ctx_,snap,self.properties.postions,self.properties.limits,line_width=self.line_width)
+        draw_ticks(self._ctx_,snap,
+                   self.properties.postions,
+                   self.properties.limits,
+                   line_width=self.line_width,
+                   width=self.width,
+                   height=self.height,
+                   color=self.properties.color,
+                   alpha=self.properties.alpha,
+                   x_tic=self.properties.x_tic,
+                   y_tic=self.properties.y_tic
+                   )
         self._ctx_.set_antialias(cairo.Antialias.DEFAULT)

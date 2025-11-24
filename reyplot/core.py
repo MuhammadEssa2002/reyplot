@@ -91,12 +91,14 @@ class ScatterPlot:
 
 
 class Axes:
-    def __init__(self,postions,limits,color,style,alpha):
+    def __init__(self,postions,limits,color,style,alpha,x_tic,y_tic):
         self.postions = postions
         self.limits = limits
         self.color = __hex_to_rgb_rey__(color)
         self.style = style
         self.alpha = alpha
+        self.x_tic = x_tic
+        self.y_tic = y_tic
 
     def draw(self,ctx,width,height):
         from .axes import Draw_Axes
@@ -258,10 +260,12 @@ class chart:
 
 
     # Creating the Axes class
-    def axes(self,color="black",style="two_lines",alpha = 1):
+    def axes(self,color="black",style="two_lines",alpha = 1,x_tic = 4, y_tic = 4):
         self.axes_color = color
         self.axes_style = style
         self.axes_alpha = alpha
+        self.x_tic = x_tic
+        self.y_tic = y_tic
 
 
 
@@ -304,7 +308,9 @@ class chart:
                      self._OUTER_LAYER_POSTION_.limits(),
                      self.axes_color,
                      self.axes_style,
-                     self.axes_alpha
+                     self.axes_alpha,
+                     self.x_tic,
+                     self.y_tic
                      )
         self.layers.append(layer)
 

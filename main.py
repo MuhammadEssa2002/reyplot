@@ -9,9 +9,9 @@ chart.scatter(data = data,
               x="sepal_length",
               y="petal_length",
               stroke_size=2,
-              alpha=0.5)
-
-
+              alpha=0.5,
+              color="teal")
+chart.axes(color="teal")
 chart.show()
 
 
