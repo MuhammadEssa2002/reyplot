@@ -30,12 +30,12 @@ def calculate_ticks(position,limits,x_tic,y_tic):
 
 
 ## For Creating the tics and text on the axes
-def draw_ticks(_ctx_,snap,position,limits,line_width,width,height,color,alpha,x_tic,y_tic):
+def draw_ticks(_ctx_,snap,position,limits,line_width,width,height,color,alpha,x_tic,y_tic,sig_digits):
     ticks = calculate_ticks(position=position, limits=limits, x_tic=x_tic, y_tic=y_tic)
     len_tick_height = height * 0.01
     len_tick_width = width * 0.008
     font_size = math.sqrt(width**2 + height**2)/80
-    formater = AutoNumberFormatter()
+    formater = AutoNumberFormatter(sig_digits=sig_digits)
 
     for i in range(len(ticks[0])):
         _ctx_.set_line_width(line_width)
@@ -158,7 +158,8 @@ class Draw_Axes:
                    color=self.properties.color,
                    alpha=self.properties.alpha,
                    x_tic=self.properties.x_tic,
-                   y_tic=self.properties.y_tic
+                   y_tic=self.properties.y_tic,
+                   sig_digits=self.properties.sig_digits
                    )
         self._ctx_.set_antialias(cairo.Antialias.DEFAULT)
 

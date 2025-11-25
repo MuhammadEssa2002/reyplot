@@ -48,6 +48,18 @@ class OuterLayer:
 
 
 
+class X_Y_titles:
+    def __init__(self,x_title,y_title,x_color,y_color,x_alpha,y_alpha):
+        self.x_title = x_title
+        self.y_title = y_title
+        self.x_color = __hex_to_rgb_rey__(x_color)
+        self.y_color = __hex_to_rgb_rey__(y_color)
+        self.x_alpha = x_alpha
+        self.y_alpha = y_alpha
+    
+    def draw(self,ctx,width,height):
+        from .titles import Draw_X_Y_titles
+        Draw_X_Y_titles(self,ctx,width,height)
 
 
 
@@ -91,7 +103,7 @@ class ScatterPlot:
 
 
 class Axes:
-    def __init__(self,postions,limits,color,style,alpha,x_tic,y_tic):
+    def __init__(self,postions,limits,color,style,alpha,x_tic,y_tic,sig_digits):
         self.postions = postions
         self.limits = limits
         self.color = __hex_to_rgb_rey__(color)
@@ -99,6 +111,7 @@ class Axes:
         self.alpha = alpha
         self.x_tic = x_tic
         self.y_tic = y_tic
+        self.sig_digits = sig_digits
 
     def draw(self,ctx,width,height):
         from .axes import Draw_Axes
@@ -116,7 +129,7 @@ class chart:
     This is the only class the user needs to interact with directly.
     It holds and manages all the plot layers.
     """
-    def __init__(self, size=[900, 600], scale=1):
+    def __init__(self, size=[600, 480], scale=1):
         # Store figure properties
         self.orignal_width = size[0]
         self.orignal_height = size[1]
@@ -139,12 +152,17 @@ class chart:
         # Creating the outer layer layout
         from .layout import OuterLayerPostion
         self._OUTER_LAYER_POSTION_ = OuterLayerPostion(width = self.width, height= self.height)
+
+        # Creating the x and y title for the plot 
+        from .titles import X_Y_titles
+        self.x_y_titles = X_Y_titles()
+        self.x_y_titles_flag = False
         
         self.layers = []
         self._OUTER_LAYER_FLAG_ = False
         self._MATUAL_ACTIVE_OUTER_LAYER_ = False
 
-        self.inner_layer(color="#E3E3E3")
+        self.inner_layer(color="#EEEEEE")
         
         self.axes_flag = False
         self.axes()
@@ -158,7 +176,7 @@ class chart:
 
 
     # This is inner layer method which takes mantual data from user
-    def inner_layer(self, color="#E3E3E3", gradient=False, gradient_color="#000000", alpha=1):
+    def inner_layer(self, color="#EEEEEE", gradient=False, gradient_color="#000000", alpha=1):
         """Creates an InnerLayer object and adds it to our layer list."""
         layer = InnerLayer(color, gradient, gradient_color, alpha)
         # Check if an inner layer already exists
@@ -177,7 +195,7 @@ class chart:
 
 
     # This is outer layer method which takes mantual data from user
-    def outer_layer(self, color="#E3E3E3", gradient=False, gradient_color="#000000", alpha=1):
+    def outer_layer(self, color="#EEEEEE", gradient=False, gradient_color="#000000", alpha=1):
         """Creates an InnerLayer object and adds it to our layer list."""
         self._MATUAL_ACTIVE_OUTER_LAYER_ = True
         self._MATUAL_OUTER_LAYER_COLOR_ = color
@@ -203,6 +221,13 @@ class chart:
         self._OUTER_LAYER_POSTION_.use_y_limit(limits)
 
 
+    # User define the plot x_title
+    def x_title(self, x_title):
+        self.x_y_titles.update_x_title_manual(x_title=x_title)
+    
+    # User define the plot y_title
+    def y_title(self,y_title):
+        self.x_y_titles.update_y_title_manual(y_title= y_title)
 
 
 
@@ -216,6 +241,12 @@ class chart:
         from .converters import to_polars
         data = to_polars(data)
         data = data.drop_nans()
+
+        # Calling the x_y_titles for the plot titles
+        self.x_y_titles.update_x_title(x)
+        self.x_y_titles.update_y_title(y)
+
+        
 
         layer = ScatterPlot(data=data,x=x,y=y,color=color,size=size,alpha=alpha,stroke_size=stroke_size,stroke_gradient=stroke_gradient)
         self.layers.append(layer)
@@ -260,12 +291,13 @@ class chart:
 
 
     # Creating the Axes class
-    def axes(self,color="black",style="two_lines",alpha = 1,x_tic = 4, y_tic = 4):
+    def axes(self,color="black",style="two_lines",alpha = 1,x_tic = 4, y_tic = 4, sig_digits = 3):
         self.axes_color = color
         self.axes_style = style
         self.axes_alpha = alpha
         self.x_tic = x_tic
         self.y_tic = y_tic
+        self.sig_digits = sig_digits
 
 
 
@@ -273,7 +305,7 @@ class chart:
     def _draw_layers(self, ctx):
         """Helper to loop through all layers and tell them to draw."""
         
-
+        
         #Creating the outer_layer
         if not (self._OUTER_LAYER_FLAG_):
             if (self._MATUAL_ACTIVE_OUTER_LAYER_):
@@ -287,7 +319,7 @@ class chart:
                 self.layers.append(layer)
             else:
                 self._OUTER_LAYER_FLAG_ = True
-                layer = OuterLayer(color="#E3E3E3",
+                layer = OuterLayer(color="#EEEEEE",
                            gradient=False,
                            gradient_color="#000000",
                            alpha=1,
@@ -303,6 +335,16 @@ class chart:
                 layer.update_postions(self._OUTER_LAYER_POSTION_.postion())
 
 
+        # Creating the X_Y_tilte layer
+        if not(self.x_y_titles_flag):
+            layer = X_Y_titles(x_title=self.x_y_titles.x_title,
+                               y_title=self.x_y_titles.y_title,
+                               x_color="black",
+                               y_color="black",
+                               x_alpha=1,
+                               y_alpha=1)
+            self.layers.append(layer)
+
         #Creating the axes
         layer = Axes(self._OUTER_LAYER_POSTION_.postion(),
                      self._OUTER_LAYER_POSTION_.limits(),
@@ -310,7 +352,8 @@ class chart:
                      self.axes_style,
                      self.axes_alpha,
                      self.x_tic,
-                     self.y_tic
+                     self.y_tic,
+                     self.sig_digits
                      )
         self.layers.append(layer)
 
@@ -328,18 +371,24 @@ class chart:
 
 
 
-    def save(self, name="reyplot"):
-        """Saves the figure to a PNG file."""
-        surface, ctx = self._create_surface()
-        self._draw_layers(ctx)
+    def save(self, name="reyplot", filetype="png"):
+        filetype = filetype.lower()
 
-        _BUFFER_ = io.BytesIO()
-        surface.write_to_png(_BUFFER_)
-        _BUFFER_.seek(0)
+        if filetype == "png":
+            # Create a raster surface
+            surface, ctx = self._create_surface()  # This should return an ImageSurface
+            self._draw_layers(ctx)
+            surface.write_to_png(f"{name}.png")
+        elif filetype == "svg":
+            # Create a VECTOR surface
+            surface = cairo.SVGSurface(f"{name}.svg", self.orignal_width , self.orignal_height)
+            ctx = cairo.Context(surface)
 
-        _IMAGE_ = Image.open(_BUFFER_)
-        _IMAGE_ = _IMAGE_.resize((self.orignal_width, self.orignal_height), Image.LANCZOS)
-        _IMAGE_.save(f"{name}.png")
+            self._draw_layers(ctx)
+            surface.finish()  # Required! Without it SVG will be incomplete.
+
+        else:
+            raise ValueError(f"Unsupported file type: '{filetype}'")
 
 
 
@@ -352,24 +401,50 @@ class chart:
 
 
     def show(self):
-        """Displays the figure in a new Tkinter window."""
-        surface, ctx = self._create_surface()
+        """Displays the figure in a new Tkinter window with High Quality."""
+        
+        # 1. Calculate the target size (The size you actually want to see)
+        display_width = int(self.orignal_width)
+        display_height = int(self.orignal_height)
+
+        # 2. Create the Surface at the EXACT display size
+        # (Do not use self._create_surface() if it defaults to the large size)
+        surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, display_width, display_height)
+        ctx = cairo.Context(surface)
+
+        # 3. MAGIC STEP: Scale the Cairo Context
+        # We calculate the ratio (approx 0.66)
+        scale_x = display_width / self.orignal_width
+        scale_y = display_height / self.orignal_height
+        
+        # This tells Cairo: "When I say draw a line 100px long, actually draw it 66px long"
+        # This keeps lines mathematically crisp, not blurry.
+        ctx.scale(scale_x, scale_y)
+
+        # 4. Draw your layers (Cairo will now draw them perfectly fit in the smaller box)
         self._draw_layers(ctx)
 
-       
-       
-        _BUFFER_ = io.BytesIO()
-        surface.write_to_png(_BUFFER_)
-        _BUFFER_.seek(0)
+        # 5. Convert to Pillow directly (No Resizing!)
+        # Using memory buffer is faster than io.BytesIO + PNG
+        buf = surface.get_data()
+        _IMAGE_ = Image.frombuffer(
+            "RGBA", 
+            (display_width, display_height), 
+            buf, 
+            "raw", 
+            "BGRA", 
+            0, 
+            1
+        )
 
-        _IMAGE_ = Image.open(_BUFFER_)
-        _IMAGE_ = _IMAGE_.resize((round(self.orignal_width/1.5), round(self.orignal_height/1.5)), Image.LANCZOS)
+        # 6. Tkinter Setup
         _ROOT_ = tkinter.Tk()
         _ROOT_.title("ReyPlot")
         
         _TK_IMAGE_ = ImageTk.PhotoImage(_IMAGE_)
         label = tkinter.Label(_ROOT_, image=_TK_IMAGE_)
         label.pack()
+        
         _ROOT_.mainloop()
 
 
