@@ -33,7 +33,9 @@ def calculate_ticks(position,limits,x_tic,y_tic):
 def draw_ticks(_ctx_,snap,position,limits,line_width,width,height,color,alpha,x_tic,y_tic):
     ticks = calculate_ticks(position=position, limits=limits, x_tic=x_tic, y_tic=y_tic)
     len_tick_height = height * 0.01
+    len_tick_width = width * 0.008
     font_size = math.sqrt(width**2 + height**2)/80
+    formater = AutoNumberFormatter()
 
     for i in range(len(ticks[0])):
         _ctx_.set_line_width(line_width)
@@ -51,13 +53,43 @@ def draw_ticks(_ctx_,snap,position,limits,line_width,width,height,color,alpha,x_
         _ctx_.select_font_face("Sans", cairo.FONT_SLANT_NORMAL)
         _ctx_.set_font_size(font_size)
         _ctx_.set_source_rgba(color[0], color[1], color[2],alpha)
-        extents = _ctx_.text_extents("{:.2f}".format(ticks[2][i]))
+        extents = _ctx_.text_extents(formater(ticks[2][i]))
         
         text_width = extents.width
         text_height = extents.height
 
         _ctx_.move_to(snap(ticks[0][i]) - text_width/2 , snap(position[2]+len_tick_height) + text_height )
-        _ctx_.show_text("{:.2f}".format(ticks[2][i]))
+        _ctx_.show_text(formater(ticks[2][i]))
+        _ctx_.stroke()
+
+    
+
+    for i in range(len(ticks[1])):
+        _ctx_.set_line_width(line_width)
+        _ctx_.set_source_rgba(color[0], color[1], color[2],alpha)
+
+        
+        _ctx_.move_to(snap(position[0]-len_tick_width),
+                      snap(ticks[1][i])
+                      )
+        
+        _ctx_.line_to(snap(position[0]+len_tick_width),
+                      snap(ticks[1][i])
+                      )
+        
+        _ctx_.stroke()
+
+        # Ticks values 
+        _ctx_.select_font_face("Sans", cairo.FONT_SLANT_NORMAL)
+        _ctx_.set_font_size(font_size)
+        _ctx_.set_source_rgba(color[0], color[1], color[2],alpha)
+        extents = _ctx_.text_extents(formater(ticks[3][i]))
+        
+        text_width = extents.width
+        text_height = extents.height
+
+        _ctx_.move_to(snap(position[0]-2*len_tick_width) - text_width ,snap(ticks[1][i]) + text_height/2 )
+        _ctx_.show_text(formater(ticks[3][i]))
         _ctx_.stroke()
 
 
@@ -129,3 +161,18 @@ class Draw_Axes:
                    y_tic=self.properties.y_tic
                    )
         self._ctx_.set_antialias(cairo.Antialias.DEFAULT)
+
+
+
+class AutoNumberFormatter:
+    def __init__(self, sci_min=1e-3, sci_max=1e4, sig_digits=3):
+        self.sci_min = sci_min
+        self.sci_max = sci_max
+        self.sig_digits = sig_digits
+
+    def __call__(self, x):
+        if x == 0:
+            return "0"
+        if abs(x) < self.sci_min or abs(x) >= self.sci_max:
+            return format(x, f".{self.sig_digits}e")
+        return format(x, f".{self.sig_digits}g")

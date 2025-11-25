@@ -11,7 +11,8 @@ chart.scatter(data = data,
               stroke_size=2,
               alpha=0.5,
               color="teal")
-chart.axes(color="teal")
+
+
 chart.show()
 
 
