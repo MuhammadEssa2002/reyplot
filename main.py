@@ -4,6 +4,7 @@ import reyplot as rp
 
 data = rp.load_dataset("iris")
 
+print(data.head())
 
 chart = rp.chart()
 chart.scatter(data = data,
