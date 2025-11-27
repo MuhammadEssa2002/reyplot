@@ -6,10 +6,10 @@ class X_Y_titles:
         # 1. FIX: Added default colors/alpha so the draw class doesn't crash
         self._x_title = None
         self._y_title = None
-        self.x_color = (0, 0, 0) # Default Black
-        self.x_alpha = 1.0
-        self.y_color = (0, 0, 0) # Default Black
-        self.y_alpha = 1.0
+        self.x_color = None
+        self.x_alpha = None
+        self.y_color = None
+        self.y_alpha = None
     
     def update_x_title(self, x_title):
         if self._x_title is None:

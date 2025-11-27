@@ -156,6 +156,11 @@ class chart:
         # Creating the x and y title for the plot 
         from .titles import X_Y_titles
         self.x_y_titles = X_Y_titles()
+        # Sitting the defult values of x and y title
+        self.x_y_titles.x_color = "black"
+        self.x_y_titles.x_alpha = 1
+        self.x_y_titles.y_color = "black"
+        self.x_y_titles.y_alpha = 1
         self.x_y_titles_flag = False
         
         self.layers = []
@@ -222,12 +227,20 @@ class chart:
 
 
     # User define the plot x_title
-    def x_title(self, x_title):
-        self.x_y_titles.update_x_title_manual(x_title=x_title)
+    def x_title(self, x_title = None, color = "black",alpha = 1):
+        if not(x_title == None):
+            self.x_y_titles.update_x_title_manual(x_title=x_title)
+        
+        self.x_y_titles.x_color  = color
+        self.x_y_titles.x_alpha = alpha
     
     # User define the plot y_title
-    def y_title(self,y_title):
-        self.x_y_titles.update_y_title_manual(y_title= y_title)
+    def y_title(self,y_title = None, color = "black", alpha = 1):
+        if not (y_title == None):
+            self.x_y_titles.update_y_title_manual(y_title= y_title)
+        
+        self.x_y_titles.y_color = color
+        self.x_y_titles.y_alpha = alpha
 
 
 
@@ -339,10 +352,10 @@ class chart:
         if not(self.x_y_titles_flag):
             layer = X_Y_titles(x_title=self.x_y_titles.x_title,
                                y_title=self.x_y_titles.y_title,
-                               x_color="black",
-                               y_color="black",
-                               x_alpha=1,
-                               y_alpha=1)
+                               x_color=self.x_y_titles.x_color,
+                               y_color=self.x_y_titles.y_color,
+                               x_alpha=self.x_y_titles.x_alpha,
+                               y_alpha=self.x_y_titles.y_alpha)
             self.layers.append(layer)
 
         #Creating the axes
