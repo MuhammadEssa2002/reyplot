@@ -62,6 +62,15 @@ class X_Y_titles:
         Draw_X_Y_titles(self,ctx,width,height)
 
 
+class Plot_title:
+    def __init__(self,title,color,alpha):
+        self.title = title
+        self.color = __hex_to_rgb_rey__(color)
+        self.alpha = alpha
+    
+    def draw(self,ctx,width,height):
+        from .titles import Draw_Plot_title
+        Draw_Plot_title(self,ctx,width,height)
 
 
 
@@ -162,6 +171,15 @@ class chart:
         self.x_y_titles.y_color = "black"
         self.x_y_titles.y_alpha = 1
         self.x_y_titles_flag = False
+
+        # Creating the Plot_title
+        from .titles import Plot_title
+        self.plot_title = Plot_title()
+        # Sitting the defult values of the plot title
+        self.plot_title.title = ""
+        self.plot_title.color = "black"
+        self.plot_title.alpha = 1
+        self.plot_title_flag = False
         
         self.layers = []
         self._OUTER_LAYER_FLAG_ = False
@@ -242,6 +260,12 @@ class chart:
         self.x_y_titles.y_color = color
         self.x_y_titles.y_alpha = alpha
 
+    # User define the plot title
+    def title(self,title,color="black",alpha=1):
+        self._OUTER_LAYER_POSTION_.update_y1(2.7)
+        self.plot_title.title = title
+        self.plot_title.color = color
+        self.plot_title.alpha = alpha
 
 
 
@@ -350,6 +374,7 @@ class chart:
 
         # Creating the X_Y_tilte layer
         if not(self.x_y_titles_flag):
+            self.x_y_titles_flag = True
             layer = X_Y_titles(x_title=self.x_y_titles.x_title,
                                y_title=self.x_y_titles.y_title,
                                x_color=self.x_y_titles.x_color,
@@ -357,6 +382,15 @@ class chart:
                                x_alpha=self.x_y_titles.x_alpha,
                                y_alpha=self.x_y_titles.y_alpha)
             self.layers.append(layer)
+
+        # Creating the plot title layer
+        if not(self.plot_title_flag):
+            self.plot_title_flag = True
+            layer = Plot_title(title=self.plot_title.title,
+                               color=self.plot_title.color,
+                               alpha=self.plot_title.alpha)
+            self.layers.append(layer)
+
 
         #Creating the axes
         layer = Axes(self._OUTER_LAYER_POSTION_.postion(),

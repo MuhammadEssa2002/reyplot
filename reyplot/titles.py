@@ -83,3 +83,46 @@ class Draw_X_Y_titles: # Fixed typo 'tiles' -> 'titles'
             self.ctx.stroke()
             
             self.ctx.restore() # 3. FIX: Restore coordinate system to normal
+
+
+
+
+
+
+## Main plot title
+
+class Plot_title:
+    def __init__(self):
+        self.title = None
+        self.color = None
+        self.alpha = None
+
+
+class Draw_Plot_title:
+    def __init__(self, properties, context, width, height):
+        self.properties = properties
+        self.ctx = context
+        self.width = width
+        self.height = height
+
+        self.font_size = math.sqrt(width**2 + height**2) / 40
+        self.ctx = context # Fixed typo 'contex'
+
+        
+        self.ctx.save() # Good practice to isolate state
+        self.ctx.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
+        self.ctx.set_font_size(self.font_size)
+        self.ctx.set_source_rgba(*properties.color, properties.alpha)
+
+        extents = self.ctx.text_extents(properties.title)
+        
+        text_width = extents.width
+
+        text_height = extents.height
+        
+        self.ctx.move_to(width/2 - text_width/2, text_height+text_height/2)
+        self.ctx.show_text(properties.title)
+        self.ctx.stroke()
+        self.ctx.restore()
+
+        
