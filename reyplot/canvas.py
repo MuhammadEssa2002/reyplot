@@ -27,3 +27,12 @@ def calculate_dynamic_radius(surface_width, surface_height, num_points,size):
     final_radius = max(min_pixel_size, min(raw_radius, max_pixel_size))
     
     return final_radius
+
+
+
+def roundrect(ctx, x, y, width, height, r):
+    ctx.arc(x+r, y+r, r, math.pi, 3*math.pi/2)
+    ctx.arc(x+width-r, y+r, r, 3*math.pi/2, 0)
+    ctx.arc(x+width-r, y+height-r, r, 0, math.pi/2)
+    ctx.arc(x+r, y+height-r, r, math.pi/2, math.pi)
+    ctx.close_path()

@@ -77,14 +77,19 @@ class Plot_title:
 
 class Block_Grid:
     def __init__(self, color, gradient, gradient_color, alpha, radius):
-        self.color = __hex_to_rgb_rey__(color)
-        self.gradient = gradient
-        self.gradient_color = __hex_to_rgb_rey__(gradient_color)
-        self.alpha = alpha
-        self.radius = radius
+        self.block_color = __hex_to_rgb_rey__(color)
+        self.block_gradient = gradient
+        self.block_gradient_color = __hex_to_rgb_rey__(gradient_color)
+        self.block_alpha = alpha
+        self.block_radius = radius
+        self.positions = None
+        self.limits = None
+        self.x_tic = None
+        self.y_tic = None
 
     def draw(self,ctx,width,height):
-        pass
+        from .block_grid import Draw_Block_Grid
+        Draw_Block_Grid(self,ctx,width,height)
 
 
 
@@ -290,11 +295,11 @@ class chart:
 
     # Block_Grid method
     def block_grid(self,color="#D1D1D1", gradient=True, gradient_color="#000000", alpha=1,radius = 1):
-        self.block_grid_layer.color = color
-        self.block_grid_layer.gradient = gradient
-        self.block_grid_layer.gradient_color = gradient_color
-        self.block_grid_layer.alpha = alpha
-        self.block_grid_layer.radius = radius
+        self.block_grid_layer.block_color = __hex_to_rgb_rey__(color)
+        self.block_grid_layer.block_gradient = gradient
+        self.block_grid_layer.block_gradient_color = __hex_to_rgb_rey__(gradient_color)
+        self.block_grid_layer.block_alpha = alpha
+        self.block_grid_layer.block_radius = radius
 
 
 
@@ -392,6 +397,15 @@ class chart:
                            size=self._OUTER_LAYER_POSTION_.postion()
                            )
                 self.layers.append(layer)
+
+
+
+        # Updating the block_grid
+        self.block_grid_layer.positions = self._OUTER_LAYER_POSTION_.postion()
+        self.block_grid_layer.limits = self._OUTER_LAYER_POSTION_.limits()
+        self.block_grid_layer.x_tic = self.x_tic
+        self.block_grid_layer.y_tic = self.y_tic
+
 
 
         #Updating the scatter_plot

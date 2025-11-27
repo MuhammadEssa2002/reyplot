@@ -58,7 +58,7 @@ def draw_ticks(_ctx_,snap,position,limits,line_width,width,height,color,alpha,x_
         text_width = extents.width
         text_height = extents.height
 
-        _ctx_.move_to(snap(ticks[0][i]) - text_width/2 , snap(position[2]+len_tick_height) + text_height )
+        _ctx_.move_to(snap(ticks[0][i]) - text_width/2 , snap(position[2]+len_tick_height) + 2*text_height )
         _ctx_.show_text(formater(ticks[2][i]))
         _ctx_.stroke()
 
