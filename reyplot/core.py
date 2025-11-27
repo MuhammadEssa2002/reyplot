@@ -262,7 +262,7 @@ class chart:
 
     # User define the plot title
     def title(self,title,color="black",alpha=1):
-        self._OUTER_LAYER_POSTION_.update_y1(2.7)
+        self._OUTER_LAYER_POSTION_.update_y1(2.5)
         self.plot_title.title = title
         self.plot_title.color = color
         self.plot_title.alpha = alpha
