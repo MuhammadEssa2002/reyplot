@@ -72,6 +72,9 @@ class Plot_title:
         from .titles import Draw_Plot_title
         Draw_Plot_title(self,ctx,width,height)
 
+
+
+
 class Block_Grid:
     def __init__(self, color, gradient, gradient_color, alpha, radius):
         self.color = __hex_to_rgb_rey__(color)
@@ -79,6 +82,11 @@ class Block_Grid:
         self.gradient_color = __hex_to_rgb_rey__(gradient_color)
         self.alpha = alpha
         self.radius = radius
+
+    def draw(self,ctx,width,height):
+        pass
+
+
 
 class ScatterPlot:
     def __init__(self
@@ -191,8 +199,15 @@ class chart:
         self._OUTER_LAYER_FLAG_ = False
         self._MATUAL_ACTIVE_OUTER_LAYER_ = False
 
+
         self.inner_layer(color="#EEEEEE")
         
+
+        # intializing the block_grid
+        self.block_grid_layer = Block_Grid(color="#D1D1D1",gradient=True,gradient_color="black",alpha=1,radius=1)
+        self.layers.append(self.block_grid_layer)
+
+
         self.axes_flag = False
         self.axes()
 
@@ -275,12 +290,11 @@ class chart:
 
     # Block_Grid method
     def block_grid(self,color="#D1D1D1", gradient=True, gradient_color="#000000", alpha=1,radius = 1):
-        layer = Block_Grid(color=color,
-                           gradient=gradient,
-                           gradient_color=gradient_color,
-                           alpha=alpha,
-                           radius=radius)
-        self.layers.append(layer)
+        self.block_grid_layer.color = color
+        self.block_grid_layer.gradient = gradient
+        self.block_grid_layer.gradient_color = gradient_color
+        self.block_grid_layer.alpha = alpha
+        self.block_grid_layer.radius = radius
 
 
 
