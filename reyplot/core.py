@@ -86,10 +86,12 @@ class Block_Grid:
         self.limits = None
         self.x_tic = None
         self.y_tic = None
+        self.block_display = True
 
     def draw(self,ctx,width,height):
-        from .block_grid import Draw_Block_Grid
-        Draw_Block_Grid(self,ctx,width,height)
+        if (self.block_display):
+            from .block_grid import Draw_Block_Grid
+            Draw_Block_Grid(self,ctx,width,height)
 
 
 
@@ -294,12 +296,13 @@ class chart:
         self.plot_title.alpha = alpha
 
     # Block_Grid method
-    def block_grid(self,color="#D1D1D1", gradient=True, gradient_color="#000000", alpha=1,radius = 1):
+    def block_grid(self,color="#D1D1D1", gradient=True, gradient_color="#000000", alpha=1,radius = 1,display = True):
         self.block_grid_layer.block_color = __hex_to_rgb_rey__(color)
         self.block_grid_layer.block_gradient = gradient
         self.block_grid_layer.block_gradient_color = __hex_to_rgb_rey__(gradient_color)
         self.block_grid_layer.block_alpha = alpha
         self.block_grid_layer.block_radius = radius
+        self.block_grid_layer.block_display = display
 
 
 
