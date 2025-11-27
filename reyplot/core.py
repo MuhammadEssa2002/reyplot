@@ -72,7 +72,13 @@ class Plot_title:
         from .titles import Draw_Plot_title
         Draw_Plot_title(self,ctx,width,height)
 
-
+class Block_Grid:
+    def __init__(self, color, gradient, gradient_color, alpha, radius):
+        self.color = __hex_to_rgb_rey__(color)
+        self.gradient = gradient
+        self.gradient_color = __hex_to_rgb_rey__(gradient_color)
+        self.alpha = alpha
+        self.radius = radius
 
 class ScatterPlot:
     def __init__(self
@@ -266,6 +272,15 @@ class chart:
         self.plot_title.title = title
         self.plot_title.color = color
         self.plot_title.alpha = alpha
+
+    # Block_Grid method
+    def block_grid(self,color="#D1D1D1", gradient=True, gradient_color="#000000", alpha=1,radius = 1):
+        layer = Block_Grid(color=color,
+                           gradient=gradient,
+                           gradient_color=gradient_color,
+                           alpha=alpha,
+                           radius=radius)
+        self.layers.append(layer)
 
 
 
