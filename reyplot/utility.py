@@ -49,3 +49,25 @@ def __hex_to_rgb_rey__(color):
     except Exception:
         # Default to black if invalid
         return (0, 0, 0)
+
+class scatter_color_select:
+    def __init__(self):
+        self.COLOR_NAMES = {
+    1: "#800000", # maroon
+    2: "#ffa500",  # orange
+    3: "#0000ff",  # blue
+    4: "#000000",  # black
+    5: "#808080",  # gray
+    6: "#00ff00",  # green
+    7: "#00ffff", # cyan
+    8: "#008080", # teal
+    9: "#ffff00",  # yellow
+    10: "#800080", # purple
+    }
+        self.count = 0
+    
+    def give_color(self):
+        if (self.count > 9):
+            self.count = 0
+        self.count = self.count + 1
+        return self.COLOR_NAMES[self.count]

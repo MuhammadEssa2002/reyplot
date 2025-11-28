@@ -3,9 +3,11 @@ import tkinter
 from PIL import Image, ImageTk
 import io
 import os
+import polars as pl
 
 # Importing the utility functions
 from .utility import __hex_to_rgb_rey__
+from .utility import scatter_color_select
 
 # Importing the Validators for error handling
 from .validators import validate_limits
@@ -171,15 +173,9 @@ class chart:
         # Store figure properties
         self.orignal_width = size[0]
         self.orignal_height = size[1]
-        # if (self.orignal_width < 500):
-        #     self.width = size[0] * 10
-        # else:
-        #     self.width = size[0]
 
-        # if (self.orignal_height < 500):
-        #         self.height = size[1] * 10
-        # else:
-        #     self.height = size[1]
+        #Selecting the scatter plot color
+        self.scatter_color_selector = scatter_color_select()
 
         self.width = self.orignal_width
         self.height = self.orignal_height
@@ -316,8 +312,10 @@ class chart:
 
 
     # Creating the scatterPlot method where user can define the main data and columns to work on!
-    def scatter(self,x ,y , data = None, color = "maroon",size = 1,alpha = 0.7,stroke_size = 1,stroke=True,glow = False,shadow = False, shadow_radius = 1):
-        if ((data == None) and not(isinstance(x,str)) and not(isinstance(y,str))):
+    def scatter(self,x ,y , data = None, color = None ,size = 1,alpha = 0.7,stroke_size = 1,stroke=True,glow = False,shadow = False, shadow_radius = 1):
+        
+        # Checking the x_y data
+        if (not(isinstance(data,pl.DataFrame)) and not(isinstance(x,str)) and not(isinstance(y,str))):
             from .validators import check_type
             
             check_type(x)
@@ -336,6 +334,10 @@ class chart:
             from .converters import to_polars
             data = to_polars(data)
         
+
+        # Giving scatter color auto
+        if (color == None):
+            color = self.scatter_color_selector.give_color()
         
         data = data.drop_nans()
 
