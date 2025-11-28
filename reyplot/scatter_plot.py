@@ -32,6 +32,11 @@ class _Draw_Scatter_():
         
         dot_radius = calculate_dynamic_radius(self.width,self.height,len(self.x_pixels),self.properties.dot_size)
         
+        if (self.properties.shadow):
+            from .canvas import shadow_scatter_num_num
+            shadow_scatter_num_num(self.x_pixels,self.y_pixels,self._ctx_,dot_radius,self.properties.shadow_radius,width,height)
+
+
         if (self.properties.glow):
             from .canvas import glow_scatter_num_num
             glow_scatter_num_num(properties=properties , main_ctx= self._ctx_, width= self.width, height= self.height)

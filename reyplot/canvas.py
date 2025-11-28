@@ -75,6 +75,21 @@ def glow_scatter_num_num(properties,main_ctx,width,height):
 
 
 
+def shadow_scatter_num_num(x_data,y_data,main_ctx,dot_radius,shadow_radi,width,height):
+    shadow_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
+    shadow_ctx = cairo.Context(shadow_surface)
+    shadow_radius = shadow_radi*5
+
+    for x,y in zip(0.02*x_data + x_data , -0.01*y_data + y_data):
+        shadow_ctx.arc(x,y,1.2*dot_radius,0,2*math.pi)
+        shadow_ctx.set_source_rgba(0,0,0,0.7)
+        shadow_ctx.fill()
+    shadow_surface.flush()
+
+    shadow_made_surface = blur_cairo_surface(shadow_surface,blur_radius=shadow_radius)
+
+    main_ctx.set_source_surface(shadow_made_surface,0,0)
+    main_ctx.paint()
 
 
 def blur_cairo_surface(cairo_surface, blur_radius):
