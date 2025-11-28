@@ -215,7 +215,7 @@ class chart:
         
 
         # intializing the block_grid
-        self.block_grid_layer = Block_Grid(color="#D1D1D1",gradient=True,gradient_color="black",alpha=1,radius=1)
+        self.block_grid_layer = Block_Grid(color="#D1D1D1",gradient=True,gradient_color="black",alpha=0.4,radius=1)
         self.layers.append(self.block_grid_layer)
 
 
@@ -300,7 +300,7 @@ class chart:
         self.plot_title.alpha = alpha
 
     # Block_Grid method
-    def block_grid(self,color="#D1D1D1", gradient=True, gradient_color="#000000", alpha=1,radius = 1,display = True):
+    def block_grid(self,color="#D1D1D1", gradient=True, gradient_color="#000000", alpha=0.4,radius = 1,display = True):
         self.block_grid_layer.block_color = __hex_to_rgb_rey__(color)
         self.block_grid_layer.block_gradient = gradient
         self.block_grid_layer.block_gradient_color = __hex_to_rgb_rey__(gradient_color)

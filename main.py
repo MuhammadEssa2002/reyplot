@@ -11,17 +11,12 @@ data_set = rp.load_dataset("iris")
 
 chrt = rp.chart([1000,800])
 
-chrt.scatter(x = x , y = y1,color="white",glow=True)
-chrt.scatter(x = x , y = y2,color="yellow",glow=True)
+chrt.scatter(x = x , y = y1)
+chrt.scatter(x = x , y = y2)
 
-chrt.x_title(x_title="X_Data",color="White")
-chrt.y_title(y_title="sin(x) and cos(x)",color="white")
-chrt.title(title="Trig Functions",color="white")
-chrt.outer_layer(color="gray",gradient=True)
-chrt.inner_layer(color="gray",gradient=True)
-chrt.block_grid(alpha=0.2)
-chrt.axes(color="white",y_tic=5)
-
-chrt.save("reyplot_1",filetype = "svg")
+chrt.x_title(x_title="X_Data")
+chrt.y_title(y_title="sin(x) and cos(x)")
+chrt.title(title="Trig Functions")
 chrt.show()
+
 

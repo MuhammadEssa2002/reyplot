@@ -118,7 +118,7 @@ class Draw_Axes:
         # FIX 2: Pixel Snapping Helper
         # This ensures the line hits the center of the pixel (x.5)
         # preventing it from being drawn between two pixels (which creates blur/width issues).
-        snap = lambda x: round(x) + 0.5
+        snap = lambda x: x
 
         # Pre-calculate snapped positions for cleaner code
         # Assuming positions are [x_start, x_end, y_bottom, y_top]
