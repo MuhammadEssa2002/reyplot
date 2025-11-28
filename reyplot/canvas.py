@@ -69,9 +69,9 @@ def glow_scatter_num_num(properties,main_ctx,width,height):
     ctx.set_source_surface(glow_made_surface, 0, 0)
 
     ctx.paint()
-    properties.scatter_color = (1,1,1)
     properties.dot_size = temp_dot_size
     properties.alpha = temp_alpha
+    properties.glow_gradient = True
 
 
 

@@ -39,43 +39,44 @@ class _Draw_Scatter_():
 
         for x , y in zip (self.x_pixels,self.y_pixels):
             self._ctx_.arc(x , y , dot_radius , 0, 2 * math.pi)
-            self._ctx_.set_source_rgba(self.properties.scatter_color[0],
-                                       self.properties.scatter_color[1],
-                                       self.properties.scatter_color[2],
-                                       self.properties.alpha)
-            self._ctx_.fill_preserve()
-
-            self._ctx_.set_line_width(self.properties.stroke_size)
-            if (self.properties.stroke_gradient):
-                pat = cairo.RadialGradient(self.width/2,
+            if (self.properties.glow_gradient):
+                pat = cairo.RadialGradient(x,
                                        
-                                       self.height/2,
+                                           y,
 
-                                       math.sqrt(3*self.width*self.height/(math.pi*765)),
+                                           dot_radius/2,
                                        
-                                       self.width/2,
+                                           x,
 
-                                       self.height/2,
+                                           y,
 
-                                       math.sqrt(3*self.width*self.height/(math.pi*1.77)))
+                                           dot_radius*2)
 
                 pat.add_color_stop_rgba(0,
-                                        self.properties.scatter_color[0],
-                                        self.properties.scatter_color[1],
-                                        self.properties.scatter_color[2],
+                                        1,
+                                        1,
+                                        1,
                                         1)
 
                 pat.add_color_stop_rgba(1,
-                                        0,
-                                        0,
-                                        0,
+                                        *self.properties.scatter_color,
                                         1)
 
                 self._ctx_.set_source(pat)
             
             else:
+                self._ctx_.set_source_rgba(self.properties.scatter_color[0],
+                                       self.properties.scatter_color[1],
+                                       self.properties.scatter_color[2],
+                                       self.properties.alpha)    
+                
+            self._ctx_.fill_preserve()
+
+
+            if (self.properties.stroke):
+                self._ctx_.set_line_width(self.properties.stroke_size)
                 self._ctx_.set_source_rgb(self.properties.scatter_color[0],
-                                        self.properties.scatter_color[1],
-                                        self.properties.scatter_color[2]
-                                        )
+                                            self.properties.scatter_color[1],
+                                            self.properties.scatter_color[2]
+                                            )
             self._ctx_.stroke()

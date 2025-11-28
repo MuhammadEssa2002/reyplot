@@ -104,9 +104,10 @@ class ScatterPlot:
                  size,
                  stroke_size,
                  alpha,
-                 stroke_gradient):
+                 stroke,
+                 glow):
         
-        self.glow = True
+        self.glow = glow
         self.data = data
         self.X_data = self.data.select(x).to_series()
         self.Y_data = self.data.select(y).to_series()
@@ -114,7 +115,8 @@ class ScatterPlot:
         self.dot_size = size
         self.stroke_size = stroke_size
         self.alpha = alpha
-        self.stroke_gradient = stroke_gradient
+        self.stroke = stroke
+        self.glow_gradient = False
         self.postions = None
         self.limits = None
 
@@ -310,7 +312,7 @@ class chart:
 
 
     # Creating the scatterPlot method where user can define the main data and columns to work on!
-    def scatter(self,data,x,y,color = "maroon",size = 1,alpha = 0.7,stroke_size = 1,stroke_gradient=False):
+    def scatter(self,data,x,y,color = "maroon",size = 1,alpha = 0.7,stroke_size = 1,stroke=True,glow = False):
         from .validators import validate_data
         validate_data(data)
 
@@ -324,7 +326,7 @@ class chart:
 
         
 
-        layer = ScatterPlot(data=data,x=x,y=y,color=color,size=size,alpha=alpha,stroke_size=stroke_size,stroke_gradient=stroke_gradient)
+        layer = ScatterPlot(data=data,x=x,y=y,color=color,size=size,alpha=alpha,stroke_size=stroke_size,stroke=stroke,glow=glow)
         self.layers.append(layer)
 
         self._OUTER_LAYER_POSTION_.update_min_max_x(data.select(x))
