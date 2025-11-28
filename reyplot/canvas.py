@@ -11,7 +11,7 @@ def calculate_dynamic_radius(surface_width, surface_height, num_points,size):
     # 2. Define a 'Base Factor'.
     # This represents the size of a dot relative to the diagonal
     # if there was only 1 data point. (e.g., 2% of the screen)
-    base_factor = 0.02 
+    base_factor = 0.2 
 
     # 3. Apply the Density Falloff
     # As N increases, we divide by sqrt(N) to reduce size smoothly
@@ -21,12 +21,12 @@ def calculate_dynamic_radius(surface_width, surface_height, num_points,size):
     # 4. Clamping (Optional but recommended)
     # Enforce a minimum pixel size so dots remain visible on high-res screens
     # Enforce a maximum size so single points don't dominate
-    min_pixel_size = 6*size  # Minimum visible size
-    max_pixel_size = canvas_diagonal * 0.05 # Max 5% of screen
+    min_pixel_size = 1*size  # Minimum visible size
+    max_pixel_size = canvas_diagonal * 0.007 # Max 5% of screen
     
-    final_radius = max(min_pixel_size, min(raw_radius, max_pixel_size))
+    final_radius = min(raw_radius, max_pixel_size)
     
-    return final_radius
+    return final_radius * min_pixel_size
 
 
 
