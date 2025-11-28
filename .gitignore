@@ -5,6 +5,8 @@ __pycache__/
 
 # Seaborn Test
 seaborn_plot.py
+
+# Blur File
 blur.py
 
 # C extensions
