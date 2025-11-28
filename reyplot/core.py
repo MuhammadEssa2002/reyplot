@@ -494,9 +494,36 @@ class chart:
 
         if filetype == "png":
             # Create a raster surface
-            surface, ctx = self._create_surface()  # This should return an ImageSurface
+            surface, ctx = self._create_surface() 
             self._draw_layers(ctx)
-            surface.write_to_png(f"{name}.png")
+            buf = surface.get_data()
+            _IMAGE_ = Image.frombuffer(
+                "RGBA", 
+                (self.orignal_width, self.orignal_height), 
+                buf, 
+                "raw", 
+                "BGRA", 
+                0, 
+                1
+            )
+            _IMAGE_.save(name,format = "png")
+
+        elif filetype == "jpg":
+
+            surface, ctx = self._create_surface() 
+            self._draw_layers(ctx)
+            buf = surface.get_data()
+            _IMAGE_ = Image.frombuffer(
+                "RGBA", 
+                (self.orignal_width, self.orignal_height), 
+                buf, 
+                "raw", 
+                "BGRA", 
+                0, 
+                1
+            )
+            _IMAGE_.convert("RGB").save(name,quality = 100)
+
         elif filetype == "svg":
             # Create a VECTOR surface
             surface = cairo.SVGSurface(f"{name}.svg", self.orignal_width , self.orignal_height)
