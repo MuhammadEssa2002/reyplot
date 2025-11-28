@@ -39,6 +39,12 @@ class Draw_X_Y_titles: # Fixed typo 'tiles' -> 'titles'
         self.font_size = math.sqrt(width**2 + height**2) / 50
         self.ctx = context # Fixed typo 'contex'
 
+        if (properties.x_title == "#__GIVEN_X_SERISE__#"):
+            properties.x_title = ""
+        
+        if (properties.y_title == "#__GIVEN_Y_SERISE__#"):
+            properties.y_title = ""
+
         # --- Draw X Title ---
         if properties.x_title:
             self.ctx.save() # Good practice to isolate state

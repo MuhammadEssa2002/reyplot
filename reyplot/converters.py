@@ -59,3 +59,9 @@ def to_polars(data):
             pass
 
     raise TypeError(f"Cannot convert type {type(data)} to Polars DataFrame.")
+
+
+
+def to_polars_serise(x_data,y_data):
+
+    return pl.DataFrame({"#__GIVEN_X_SERISE__#":x_data ,"#__GIVEN_Y_SERISE__#":y_data })

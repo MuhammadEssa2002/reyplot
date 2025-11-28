@@ -101,3 +101,23 @@ def validate_limits(lim, name="x"):
     if xmin >= xmax:
         raise ValueError(f"{name}-min must be < max. Got {lim}")
 
+
+
+def check_type(x):
+    # Try to import numpy safely
+    try:
+        import numpy as np
+        numpy_available = True
+    except ImportError:
+        numpy_available = False
+        np = None  # placeholder
+
+    # Check for list
+    if isinstance(x, list):
+        return 1
+
+    # Check for NumPy array only if numpy is installed
+    if numpy_available and isinstance(x, np.ndarray):
+        return 1
+
+    raise TypeError("Unknown type. Expected list or NumPy array.")

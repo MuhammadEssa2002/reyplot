@@ -316,12 +316,27 @@ class chart:
 
 
     # Creating the scatterPlot method where user can define the main data and columns to work on!
-    def scatter(self,data,x,y,color = "maroon",size = 1,alpha = 0.7,stroke_size = 1,stroke=True,glow = False,shadow = False, shadow_radius = 1):
-        from .validators import validate_data
-        validate_data(data)
+    def scatter(self,x ,y , data = None, color = "maroon",size = 1,alpha = 0.7,stroke_size = 1,stroke=True,glow = False,shadow = False, shadow_radius = 1):
+        if ((data == None) and not(isinstance(x,str)) and not(isinstance(y,str))):
+            from .validators import check_type
+            
+            check_type(x)
+            check_type(y)
 
-        from .converters import to_polars
-        data = to_polars(data)
+            from .converters import to_polars_serise
+            data = to_polars_serise(x_data=x,y_data=y)
+            x = "#__GIVEN_X_SERISE__#"
+            y = "#__GIVEN_Y_SERISE__#"
+            
+        else:
+        
+            from .validators import validate_data
+            validate_data(data)
+
+            from .converters import to_polars
+            data = to_polars(data)
+        
+        
         data = data.drop_nans()
 
         # Calling the x_y_titles for the plot titles
