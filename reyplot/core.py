@@ -105,6 +105,8 @@ class ScatterPlot:
                  stroke_size,
                  alpha,
                  stroke_gradient):
+        
+        self.glow = True
         self.data = data
         self.X_data = self.data.select(x).to_series()
         self.Y_data = self.data.select(y).to_series()

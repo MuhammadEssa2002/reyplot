@@ -1,6 +1,5 @@
 import cairo
 import math
-import time
 
 class _Draw_Scatter_():
     def __init__(self,properties,context,width,height):
@@ -33,7 +32,11 @@ class _Draw_Scatter_():
         
         dot_radius = calculate_dynamic_radius(self.width,self.height,len(self.x_pixels),self.properties.dot_size)
         
-        start_time = time.perf_counter()
+        if (self.properties.glow):
+            from .canvas import glow_scatter_num_num
+            glow_scatter_num_num(properties=properties , main_ctx= self._ctx_, width= self.width, height= self.height)
+
+
         for x , y in zip (self.x_pixels,self.y_pixels):
             self._ctx_.arc(x , y , dot_radius , 0, 2 * math.pi)
             self._ctx_.set_source_rgba(self.properties.scatter_color[0],
@@ -76,7 +79,3 @@ class _Draw_Scatter_():
                                         self.properties.scatter_color[2]
                                         )
             self._ctx_.stroke()
-        
-        end_time = time.perf_counter()
-
-        print("for loop time = ",end_time-start_time)
