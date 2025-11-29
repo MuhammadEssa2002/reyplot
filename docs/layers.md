@@ -60,6 +60,18 @@ chrt.outer_layer(color = "gray", gradient = True, gradient_color = "white")
 ```
 ---
 
+## `alpha`
+
+Controls the opacity of the Layers.  
+Takes a `float` between **0 and 1**.  
+Default value: **0**.
+
+``` Python
+chrt.inner_layer(alpha = 0.2)
+chrt.outer_layer(alpha = 0.5)
+```
+
+
 
 
 
