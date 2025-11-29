@@ -1,13 +1,13 @@
 ## 27 dec is last day of the github token
-
 import reyplot as rp
+import numpy as np
 
-data_set = rp.load_dataset("iris")
+x = np.linspace(0, 2*np.pi, 50)
+y = np.sin(x)
 
 chrt = rp.chart()
-chrt.scatter(data=data_set, x="sepal_width", y="petal_width")
-chrt.axes(color = "red")
-chrt.title(title="Iris Data")
-
-chrt.save("axes_example_1","svg")
+chrt.scatter(x = x, y = y)
+chrt.inner_layer(color = "teal")
+chrt.outer_layer(color = "gray")
+chrt.save("layer_example_1","svg")
 chrt.show()
