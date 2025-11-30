@@ -159,3 +159,21 @@ class OuterLayerPostion:
     def limits(self):
         return (self.min_x_lim, self.max_x_lim, self.min_y_lim, self.max_y_lim)
 
+
+
+
+# Legend layout
+class Legend_Layout:
+    def __init__(self):
+        self.LEGEND = {"title":[],
+                  "type":[],
+                  "color":[]
+                  }
+    
+    def add_legend(self,title,type,color):
+        self.LEGEND["title"].append(title)
+        self.LEGEND["type"].append(type)
+        self.LEGEND["color"].append(color)
+
+    def __len__(self):
+        return len(self.LEGEND["title"])

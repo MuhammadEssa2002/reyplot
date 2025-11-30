@@ -97,6 +97,22 @@ class Block_Grid:
 
 
 
+
+class Legend_layer:
+    def __init__(self,legend_layout,positions,limits,display):
+        self.legend_layout = legend_layout
+        self.positions = positions
+        self.limits = limits
+        self.display = display
+
+    def draw(self,ctx,width,height):
+        if (self.display):
+            from .layer import Draw_Legend
+            Draw_Legend(self,ctx,width,height)
+
+
+
+
 class ScatterPlot:
     def __init__(self
                  ,data,
@@ -205,7 +221,14 @@ class chart:
         self.plot_title.color = "black"
         self.plot_title.alpha = 1
         self.plot_title_flag = False
-        
+
+
+        # Creating the Legend layout
+        from .layout import Legend_Layout
+        self.legend_layout  = Legend_Layout()
+        self.legend_flag = False
+        self.legend(display=False)
+
         self.layers = []
         self._OUTER_LAYER_FLAG_ = False
         self._MATUAL_ACTIVE_OUTER_LAYER_ = False
@@ -309,10 +332,25 @@ class chart:
         self.block_grid_layer.block_display = display
 
 
-
+    # Legend method
+    def legend(self,display = True):
+        self.legend_display = display
 
     # Creating the scatterPlot method where user can define the main data and columns to work on!
-    def scatter(self,x ,y , data = None, color = None ,size = 1,alpha = 0.7,stroke_size = 1,stroke=True,glow = False,shadow = False, shadow_radius = 1):
+    def scatter(self,
+                    x,
+                    y,
+                    data = None,
+                    color = None,
+                    size = 1,
+                    alpha = 0.7,
+                    stroke_size = 1,
+                    stroke=True,
+                    glow = False,
+                    shadow = False,
+                    shadow_radius = 1,
+                    title = None
+                    ):
         
         # Checking the x_y data
         if (not(isinstance(data,pl.DataFrame)) and not(isinstance(x,str)) and not(isinstance(y,str))):
@@ -345,7 +383,9 @@ class chart:
         self.x_y_titles.update_x_title(x)
         self.x_y_titles.update_y_title(y)
 
-        
+        if (isinstance(title,str)):
+            self.legend_layout.add_legend(title=title, type="scatter",color=color)
+            
 
         layer = ScatterPlot(data=data,x=x,y=y,color=color,size=size,alpha=alpha,stroke_size=stroke_size,stroke=stroke,glow=glow,shadow=shadow,shadow_radius=shadow_radius)
         self.layers.append(layer)
@@ -475,6 +515,15 @@ class chart:
                      )
         self.layers.append(layer)
 
+
+        
+        if not(self.legend_flag):
+            self.legend_flag = True
+            layer = Legend_layer(self.legend_layout,
+                                 self._OUTER_LAYER_POSTION_.postion(),
+                                 self._OUTER_LAYER_POSTION_.limits(),
+                                 self.legend_display)
+            self.layers.append(layer) 
 
 
         for layer in self.layers:

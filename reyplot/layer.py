@@ -106,4 +106,12 @@ class _LAYER_():
 
 
         
-        
+class Draw_Legend:
+    def __init__(self,properties,context,width,height):
+        self.properties = properties
+        self.ctx = context
+        self.width = width
+        self.height = height
+
+        for i in range(len(self.properties.legend_layout)):
+            print(i)
