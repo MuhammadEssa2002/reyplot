@@ -33,8 +33,8 @@ def roundrect(ctx, x, y, width, height, r):
 
 
 def roundrect_stroke(ctx, x, y, width, height, r,
-              text="",                
-              text_color=(0, 0, 0, 1),  
+              text,                
+              text_color,  
               fill_color=(1, 1, 1, 1),
               stroke_color=(0, 0, 0, 1),
               ):
@@ -63,8 +63,8 @@ def roundrect_stroke(ctx, x, y, width, height, r,
     # -------- Text (Centered) --------
     if text:
         # 1. Set text color
-        tr, tg, tb, ta = text_color
-        ctx.set_source_rgba(tr, tg, tb, ta)
+        
+        ctx.set_source_rgba(*text_color,1)
         
         font_size = height * 0.45  
         ctx.set_font_size(font_size)

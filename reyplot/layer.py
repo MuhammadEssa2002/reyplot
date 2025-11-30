@@ -165,7 +165,8 @@ class Draw_Legend:
                       r=self.radius_block,
                       fill_color=self.block_color,
                       stroke_color=self.stroke_color,
-                      text=self.title
+                      text=self.title,
+                      text_color=self.properties.text_color
                       
                       )
             self.block_y_pos=self.block_y_pos + self.block_height + self.block_height/4
