@@ -112,7 +112,7 @@ class Draw_Legend:
         self.ctx = context
         self.width = width
         self.height = height
-        self.loc = "bl"
+        self.loc = "tm"
         self.block_width = math.sqrt(self.properties.positions[0]**2 + self.properties.positions[1]**2)/6 
         self.block_height = math.sqrt(self.properties.positions[2]**2 + self.properties.positions[3]**2)/25
         self.radius_block =   math.sqrt(self.properties.positions[0]**2 + self.properties.positions[1]**2) *  math.sqrt(self.properties.positions[2]**2 + self.properties.positions[3]**2)/85000
@@ -126,10 +126,21 @@ class Draw_Legend:
         elif(self.loc == "tl"):
              self.block_x_pos = self.properties.positions[0] + self.width_padding
              self.block_y_pos = self.properties.positions[3] + self.height_padding
+        elif(self.loc == "tm"):
+             self.block_x_pos = self.properties.positions[1] - (self.properties.positions[1] - self.properties.positions[0])/2 - self.block_width/2
+             self.block_y_pos = self.properties.positions[3] + self.height_padding
         elif(self.loc == "bl"):
              self.block_x_pos = self.properties.positions[0] + self.width_padding
              self.block_y_pos = self.properties.positions[2] - self.height_padding - len(self.properties.legend_layout)*(self.block_height + self.block_height/4)
+        elif(self.loc == "br"):
+             self.block_x_pos = self.properties.positions[1] - self.width_padding - self.block_width
+             self.block_y_pos = self.properties.positions[2] - self.height_padding - len(self.properties.legend_layout)*(self.block_height + self.block_height/4)
+        elif(self.loc == "bm"):
+             self.block_x_pos = self.properties.positions[1] - (self.properties.positions[1] - self.properties.positions[0])/2 - self.block_width/2
+             self.block_y_pos = self.properties.positions[2] - self.height_padding - len(self.properties.legend_layout)*(self.block_height + self.block_height/4)
  
+
+
         from .canvas import roundrect_stroke
 
         for i in range(len(self.properties.legend_layout)):
