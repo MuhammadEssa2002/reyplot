@@ -80,7 +80,7 @@ class OuterLayerPostion:
         first_update = (self.min_x_lim is None)
 
         old_max = self.max_x_lim
-        old_min = self.max_x_lim
+        old_min = self.min_x_lim
 
         # First initialization
         if first_update:
@@ -96,7 +96,7 @@ class OuterLayerPostion:
 
         # Only add padding if max changed (avoid double-padding)
         if first_update or old_min != self.min_x_lim:
-            self.min_x_lim -= 0.5*padding
+            self.min_x_lim -= padding
 
         if first_update or old_max != self.max_x_lim:
             self.max_x_lim += padding
