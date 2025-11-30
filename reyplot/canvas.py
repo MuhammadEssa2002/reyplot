@@ -84,7 +84,7 @@ def roundrect_stroke(ctx, x, y, width, height, r,
         ctx.move_to(text_x, text_y)
         ctx.show_text(text)
     
-    ctx.arc(x + width/10, y + height/2 ,width/20,0,2*math.pi)
+    ctx.arc(x + width/10, y + height/2 ,height/4,0,2*math.pi)
     ctx.set_source_rgb(sr,sg,sb)
     ctx.fill()
 
