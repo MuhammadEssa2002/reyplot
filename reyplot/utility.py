@@ -54,13 +54,13 @@ class scatter_color_select:
     def __init__(self):
         self.COLOR_NAMES = {
     1: "#800000", # maroon
-    2: "#ffa500",  # orange
+    2: "#008080", # teal
     3: "#000097",  # blue
     4: "#000000",  # black
     5: "#808080",  # gray
     6: "#00ff00",  # green
     7: "#00ffff", # cyan
-    8: "#008080", # teal
+    8: "#ffa500",  # orange
     9: "#ffff00",  # yellow
     10: "#800080", # purple
     }

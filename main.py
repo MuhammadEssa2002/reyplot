@@ -10,6 +10,7 @@ chrt = rp.chart(size=[1000,800])
 chrt.scatter(data=df , x = "sepal_width", y = "sepal_length",title="sepal_width Vs. sepal_length")
 chrt.scatter(data=df, x = "sepal_width", y = "petal_length",title="speal_width Vs. petal_length")
 
-chrt.legend(location="bottom_left")
+chrt.legend()
+chrt.title("Iris Data Set")
 
 chrt.show()
