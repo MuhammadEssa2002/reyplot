@@ -42,6 +42,71 @@ def roundrect(ctx, x, y, width, height, r):
 
 
 
+
+def roundrect_stroke(ctx, x, y, width, height, r,
+              text="",                # NEW: Text string to display
+              text_color=(0, 0, 0, 1),  # NEW: Color of the text
+              fill_color=(1, 1, 1, 1),
+              stroke_color=(0, 0, 0, 1),
+              ):
+
+    ctx.new_path()
+
+    # Rounded rectangle path
+    ctx.arc(x + r,         y + r,          r, math.pi, 3*math.pi/2)
+    ctx.arc(x + width - r, y + r,          r, 3*math.pi/2, 0)
+    ctx.arc(x + width - r, y + height - r, r, 0, math.pi/2)
+    ctx.arc(x + r,         y + height - r, r, math.pi/2, math.pi)
+    ctx.close_path()
+
+    # -------- Fill (inner color) --------
+    fr, fg, fb, fa = fill_color
+    ctx.set_source_rgba(fr, fg, fb, fa)
+    ctx.fill_preserve()  # fill but keep the path
+
+    # -------- Stroke (outer color) --------
+    stroke_width = math.sqrt(width**2 + height**2)/50
+    sr, sg, sb, sa = stroke_color
+    ctx.set_source_rgba(sr, sg, sb, sa)
+    ctx.set_line_width(stroke_width)
+    ctx.stroke()
+    
+    # -------- Text (Centered) --------
+    if text:
+        # 1. Set text color
+        tr, tg, tb, ta = text_color
+        ctx.set_source_rgba(tr, tg, tb, ta)
+        
+        # 2. Auto-scale font size (60% of the box height)
+        # You can adjust 0.6 to make text larger or smaller
+        font_size = height * 0.45  
+        ctx.set_font_size(font_size)
+        
+        # Ensure a standard font is selected
+        # "Sans", slant=Normal(0), weight=Normal(0) or Bold(1)
+        ctx.select_font_face("Sans", 1, 0) 
+
+        # 3. Calculate Centering Math
+        # text_extents returns: (x_bearing, y_bearing, width, height, x_adv, y_adv)
+        extents = ctx.text_extents(text)
+
+        text_width = extents.width
+        text_height = extents.height
+        center_x = x + (width / 5)
+        center_y = y + (height/ 2)
+
+        # Subtract half the text width/height and the bearing offset
+        text_x = center_x 
+        text_y = center_y + text_height/4
+
+        ctx.move_to(text_x, text_y)
+        ctx.show_text(text)
+    
+    ctx.arc(x + width/10, y + height/2 ,width/20,0,2*math.pi)
+    ctx.set_source_rgb(sr,sg,sb)
+    ctx.fill()
+
+
 def glow_scatter_num_num(properties,main_ctx,width,height):
     properties.glow = False
 

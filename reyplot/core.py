@@ -376,7 +376,6 @@ class chart:
         # Giving scatter color auto
         if (color == None):
             color = self.scatter_color_selector.give_color()
-        
         data = data.drop_nans()
 
         # Calling the x_y_titles for the plot titles

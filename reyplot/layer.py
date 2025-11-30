@@ -1,6 +1,6 @@
 import cairo
 import math
-
+from .utility import __hex_to_rgb_rey__
 
 class _LAYER_():
     def __init__(self,properties,context,width,height):
@@ -112,6 +112,40 @@ class Draw_Legend:
         self.ctx = context
         self.width = width
         self.height = height
+        self.loc = "bl"
+        self.block_width = math.sqrt(self.properties.positions[0]**2 + self.properties.positions[1]**2)/6 
+        self.block_height = math.sqrt(self.properties.positions[2]**2 + self.properties.positions[3]**2)/25
+        self.radius_block =   math.sqrt(self.properties.positions[0]**2 + self.properties.positions[1]**2) *  math.sqrt(self.properties.positions[2]**2 + self.properties.positions[3]**2)/85000
+        self.width_padding = math.sqrt(self.properties.positions[0]**2 + self.properties.positions[1]**2) / 60
+        self.height_padding = math.sqrt(self.properties.positions[2]**2 + self.properties.positions[3]**2) / 60
+        self.block_color = (1,1,1,0.3)
+        
+        if (self.loc == "tr"):
+            self.block_x_pos = self.properties.positions[1] - self.block_width - self.width_padding
+            self.block_y_pos = self.properties.positions[3] + self.height_padding
+        elif(self.loc == "tl"):
+             self.block_x_pos = self.properties.positions[0] + self.width_padding
+             self.block_y_pos = self.properties.positions[3] + self.height_padding
+        elif(self.loc == "bl"):
+             self.block_x_pos = self.properties.positions[0] + self.width_padding
+             self.block_y_pos = self.properties.positions[2] - self.height_padding - len(self.properties.legend_layout)*(self.block_height + self.block_height/4)
+ 
+        from .canvas import roundrect_stroke
 
         for i in range(len(self.properties.legend_layout)):
-            print(i)
+            self.stroke_color = (*__hex_to_rgb_rey__(self.properties.legend_layout.LEGEND["color"][i]), 0.5)
+            self.title = self.properties.legend_layout.LEGEND["title"][i]
+            
+            roundrect_stroke(
+                      self.ctx,
+                      self.block_x_pos,
+                      self.block_y_pos,
+                      self.block_width,
+                      self.block_height,
+                      r=self.radius_block,
+                      fill_color=self.block_color,
+                      stroke_color=self.stroke_color,
+                      text=self.title
+                      
+                      )
+            self.block_y_pos=self.block_y_pos + self.block_height + self.block_height/4

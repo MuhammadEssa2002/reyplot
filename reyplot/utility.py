@@ -55,7 +55,7 @@ class scatter_color_select:
         self.COLOR_NAMES = {
     1: "#800000", # maroon
     2: "#ffa500",  # orange
-    3: "#000097ff",  # blue
+    3: "#000097",  # blue
     4: "#000000",  # black
     5: "#808080",  # gray
     6: "#00ff00",  # green
