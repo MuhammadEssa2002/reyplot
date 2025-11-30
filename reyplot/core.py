@@ -99,11 +99,12 @@ class Block_Grid:
 
 
 class Legend_layer:
-    def __init__(self,legend_layout,positions,limits,display):
+    def __init__(self,legend_layout,positions,limits,display,location):
         self.legend_layout = legend_layout
         self.positions = positions
         self.limits = limits
         self.display = display
+        self.location = location
 
     def draw(self,ctx,width,height):
         if (self.display):
@@ -333,8 +334,9 @@ class chart:
 
 
     # Legend method
-    def legend(self,display = True):
+    def legend(self,display = True,location = "top_right"):
         self.legend_display = display
+        self.legend_location = location.lower()
 
     # Creating the scatterPlot method where user can define the main data and columns to work on!
     def scatter(self,
@@ -521,7 +523,9 @@ class chart:
             layer = Legend_layer(self.legend_layout,
                                  self._OUTER_LAYER_POSTION_.postion(),
                                  self._OUTER_LAYER_POSTION_.limits(),
-                                 self.legend_display)
+                                 self.legend_display,
+                                 self.legend_location
+                                 )
             self.layers.append(layer) 
 
 

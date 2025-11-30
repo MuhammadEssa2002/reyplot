@@ -112,7 +112,7 @@ class Draw_Legend:
         self.ctx = context
         self.width = width
         self.height = height
-        self.loc = "tm"
+        self.loc = self.properties.location
         self.block_width = math.sqrt(self.properties.positions[0]**2 + self.properties.positions[1]**2)/6 
         self.block_height = math.sqrt(self.properties.positions[2]**2 + self.properties.positions[3]**2)/25
         self.radius_block =   math.sqrt(self.properties.positions[0]**2 + self.properties.positions[1]**2) *  math.sqrt(self.properties.positions[2]**2 + self.properties.positions[3]**2)/85000
@@ -120,25 +120,34 @@ class Draw_Legend:
         self.height_padding = math.sqrt(self.properties.positions[2]**2 + self.properties.positions[3]**2) / 60
         self.block_color = (1,1,1,0.3)
         
-        if (self.loc == "tr"):
+        if (self.loc == "top_right"):
             self.block_x_pos = self.properties.positions[1] - self.block_width - self.width_padding
             self.block_y_pos = self.properties.positions[3] + self.height_padding
-        elif(self.loc == "tl"):
+        elif(self.loc == "top_left"):
              self.block_x_pos = self.properties.positions[0] + self.width_padding
              self.block_y_pos = self.properties.positions[3] + self.height_padding
-        elif(self.loc == "tm"):
+        elif(self.loc == "top_middle"):
              self.block_x_pos = self.properties.positions[1] - (self.properties.positions[1] - self.properties.positions[0])/2 - self.block_width/2
              self.block_y_pos = self.properties.positions[3] + self.height_padding
-        elif(self.loc == "bl"):
+        elif(self.loc == "bottom_left"):
              self.block_x_pos = self.properties.positions[0] + self.width_padding
              self.block_y_pos = self.properties.positions[2] - self.height_padding - len(self.properties.legend_layout)*(self.block_height + self.block_height/4)
-        elif(self.loc == "br"):
+        elif(self.loc == "bottom_right"):
              self.block_x_pos = self.properties.positions[1] - self.width_padding - self.block_width
              self.block_y_pos = self.properties.positions[2] - self.height_padding - len(self.properties.legend_layout)*(self.block_height + self.block_height/4)
-        elif(self.loc == "bm"):
+        elif(self.loc == "bottom_middle"):
              self.block_x_pos = self.properties.positions[1] - (self.properties.positions[1] - self.properties.positions[0])/2 - self.block_width/2
              self.block_y_pos = self.properties.positions[2] - self.height_padding - len(self.properties.legend_layout)*(self.block_height + self.block_height/4)
- 
+        elif(self.loc == "center_left"):
+             self.block_x_pos = self.properties.positions[0] + self.width_padding
+             self.block_y_pos = self.properties.positions[3] - (self.properties.positions[3] - self.properties.positions[2])/2 - len(self.properties.legend_layout)*(self.block_height + self.block_height/4)/2
+        elif(self.loc == "center_right"):
+             self.block_x_pos = self.properties.positions[1] - self.block_width - self.width_padding
+             self.block_y_pos = self.properties.positions[3] - (self.properties.positions[3] - self.properties.positions[2])/2 - len(self.properties.legend_layout)*(self.block_height + self.block_height/4)/2
+        elif(self.loc == "center_middle"):
+             self.block_x_pos = self.properties.positions[1] - (self.properties.positions[1] - self.properties.positions[0])/2 - self.block_width/2
+             self.block_y_pos = self.properties.positions[3] - (self.properties.positions[3] - self.properties.positions[2])/2 - len(self.properties.legend_layout)*(self.block_height + self.block_height/4)/2
+
 
 
         from .canvas import roundrect_stroke

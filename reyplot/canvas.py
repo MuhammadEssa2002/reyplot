@@ -6,23 +6,12 @@ def calculate_dynamic_radius(surface_width, surface_height, num_points,size):
     """
     Calculates dot radius based on canvas size and data density.
     """
-    # 1. Calculate the physical scale of the canvas (Diagonal)
-    # This ensures 900x900 plots have larger dots than 200x200 plots
     canvas_diagonal = math.sqrt(surface_width**2 + surface_height**2)
 
-    # 2. Define a 'Base Factor'.
-    # This represents the size of a dot relative to the diagonal
-    # if there was only 1 data point. (e.g., 2% of the screen)
     base_factor = 0.2 
 
-    # 3. Apply the Density Falloff
-    # As N increases, we divide by sqrt(N) to reduce size smoothly
-    # We add 1 to num_points to avoid division by zero errors
     raw_radius = (canvas_diagonal * base_factor) / math.sqrt(num_points)
 
-    # 4. Clamping (Optional but recommended)
-    # Enforce a minimum pixel size so dots remain visible on high-res screens
-    # Enforce a maximum size so single points don't dominate
     min_pixel_size = 1*size  # Minimum visible size
     max_pixel_size = canvas_diagonal * 0.007 # Max 5% of screen
     
@@ -44,8 +33,8 @@ def roundrect(ctx, x, y, width, height, r):
 
 
 def roundrect_stroke(ctx, x, y, width, height, r,
-              text="",                # NEW: Text string to display
-              text_color=(0, 0, 0, 1),  # NEW: Color of the text
+              text="",                
+              text_color=(0, 0, 0, 1),  
               fill_color=(1, 1, 1, 1),
               stroke_color=(0, 0, 0, 1),
               ):
@@ -77,17 +66,11 @@ def roundrect_stroke(ctx, x, y, width, height, r,
         tr, tg, tb, ta = text_color
         ctx.set_source_rgba(tr, tg, tb, ta)
         
-        # 2. Auto-scale font size (60% of the box height)
-        # You can adjust 0.6 to make text larger or smaller
         font_size = height * 0.45  
         ctx.set_font_size(font_size)
         
-        # Ensure a standard font is selected
-        # "Sans", slant=Normal(0), weight=Normal(0) or Bold(1)
         ctx.select_font_face("Sans", 1, 0) 
 
-        # 3. Calculate Centering Math
-        # text_extents returns: (x_bearing, y_bearing, width, height, x_adv, y_adv)
         extents = ctx.text_extents(text)
 
         text_width = extents.width
@@ -95,7 +78,6 @@ def roundrect_stroke(ctx, x, y, width, height, r,
         center_x = x + (width / 5)
         center_y = y + (height/ 2)
 
-        # Subtract half the text width/height and the bearing offset
         text_x = center_x 
         text_y = center_y + text_height/4
 
@@ -165,31 +147,21 @@ def blur_cairo_surface(cairo_surface, blur_radius):
     width = cairo_surface.get_width()
     height = cairo_surface.get_height()
     
-    # 1. Get data from Cairo (BGRA)
     cairo_data = cairo_surface.get_data()
     
-    # 2. Create Pillow Image
-    # Cairo is BGRA (on little-endian), Pillow defaults to RGBA.
-    # We load it as BGRA so Pillow understands the channel order.
     pil_image = Image.frombuffer(
         "RGBA", (width, height), cairo_data, "raw", "BGRA", 0, 1
     )
     
-    # 3. Apply Blur
     blurred_pil = pil_image.filter(ImageFilter.GaussianBlur(blur_radius))
     
-    # 4. Convert back to Cairo format
-    # We must swap channels back to BGRA before giving it to Cairo
     r, g, b, a = blurred_pil.split()
     bgra_pil = Image.merge("RGBA", (b, g, r, a))
     
-    # Create a mutable byte array for Cairo to read
     blurred_data = bytearray(bgra_pil.tobytes())
     
-    # Calculate stride (bytes per row)
     stride = cairo.ImageSurface.format_stride_for_width(cairo.FORMAT_ARGB32, width)
     
-    # Create a new Cairo surface from this buffer
     blurred_surface = cairo.ImageSurface.create_for_data(
         blurred_data, cairo.FORMAT_ARGB32, width, height, stride
     )
