@@ -1,0 +1,19 @@
+---Last Date = 7 - 12 - 2025---
+
+[ Add the title parameter in docs for scatter method which is used in legend]
+
+[ Add the dot_shape parameter in docs for scatter method which define the dot shap]
+
+[ Add the legend method with all the parameter in the docs]
+
+[ Udate the docs for the plot title, now it can take font parameter]
+
+[Update the pics and do some correction of the docs]
+
+[ Update the legend dot shape when the scatter plot change it's shape]
+
+[ Add the background image which is important now with blur effect]
+
+[ Add shadow in the background of plot title and x_y titles]
+
+
