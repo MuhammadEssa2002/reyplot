@@ -10,7 +10,7 @@ class _Draw_Scatter_():
         self._ctx_ = context
         self.width = width
         self.height = height
-        self.dot_style = "h"
+        
 
         
         self.x_pixels = map_polars_to_pixels(
@@ -45,7 +45,7 @@ class _Draw_Scatter_():
         from .canvas import draw_hexagon, draw_circle, draw_diamond, draw_square, draw_triangle
 
         for x , y in zip (self.x_pixels,self.y_pixels):
-            if (self.dot_style == "h"):
+            if (self.properties.dot_shape == "h"):
                 draw_hexagon(self._ctx_,
                              x,
                              y,
@@ -53,7 +53,7 @@ class _Draw_Scatter_():
                              color=self.properties.scatter_color,
                              alpha=self.properties.alpha,
                              glow_gradient=self.properties.glow_gradient)
-            elif(self.dot_style == "c"):
+            elif(self.properties.dot_shape == "c"):
                 draw_circle(self._ctx_,
                              x,
                              y,
@@ -61,7 +61,7 @@ class _Draw_Scatter_():
                              color=self.properties.scatter_color,
                              alpha=self.properties.alpha,
                              glow_gradient=self.properties.glow_gradient)
-            elif(self.dot_style == "d"):
+            elif(self.properties.dot_shape == "d"):
                 draw_diamond(self._ctx_,
                              x,
                              y,
@@ -69,7 +69,7 @@ class _Draw_Scatter_():
                              color=self.properties.scatter_color,
                              alpha=self.properties.alpha,
                              glow_gradient=self.properties.glow_gradient)
-            elif(self.dot_style == "s"):
+            elif(self.properties.dot_shape == "s"):
                 draw_square(self._ctx_,
                              x,
                              y,
@@ -77,7 +77,7 @@ class _Draw_Scatter_():
                              color=self.properties.scatter_color,
                              alpha=self.properties.alpha,
                              glow_gradient=self.properties.glow_gradient)
-            elif(self.dot_style == "t"):
+            elif(self.properties.dot_shape == "t"):
                 draw_triangle(self._ctx_,
                              x,
                              y,

@@ -136,7 +136,8 @@ class ScatterPlot:
                  stroke,
                  glow,
                  shadow,
-                 shadow_radius):
+                 shadow_radius,
+                 dot_shape):
         
         self.glow = glow
         self.data = data
@@ -152,6 +153,7 @@ class ScatterPlot:
         self.shadow_radius = shadow_radius
         self.postions = None
         self.limits = None
+        self.dot_shape  = dot_shape
 
 
     def draw(self,ctx,width,height):
@@ -368,7 +370,8 @@ class chart:
                     glow = False,
                     shadow = False,
                     shadow_radius = 1,
-                    title = None
+                    title = None,
+                    dot_shape = "c"
                     ):
         
         # Checking the x_y data
@@ -405,7 +408,18 @@ class chart:
             self.legend_layout.add_legend(title=title, type="scatter",color=color)
             
 
-        layer = ScatterPlot(data=data,x=x,y=y,color=color,size=size,alpha=alpha,stroke_size=stroke_size,stroke=stroke,glow=glow,shadow=shadow,shadow_radius=shadow_radius)
+        layer = ScatterPlot(data=data,
+                            x=x,
+                            y=y,
+                            color=color,
+                            size=size,
+                            alpha=alpha,
+                            stroke_size=stroke_size,
+                            stroke=stroke,
+                            glow=glow,
+                            shadow=shadow,
+                            shadow_radius=shadow_radius,
+                            dot_shape = dot_shape)
         self.layers.append(layer)
 
         self._OUTER_LAYER_POSTION_.update_min_max_x(data.select(x))
