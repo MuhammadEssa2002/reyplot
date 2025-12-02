@@ -32,14 +32,20 @@ def roundrect(ctx, x, y, width, height, r):
 
 
 
-def roundrect_stroke(ctx, x, y, width, height, r,
+def roundrect_stroke(ctx, x, y, width, height, r,canva_width,canva_height,
               text,                
               text_color,
               stroke_manual_color,
+              shadow,
               fill_color=(1, 1, 1, 1),
               stroke_color=(0, 0, 0, 1),
-              stroke = True              
+              stroke = True            
               ):
+
+    ## Shadow
+    if (shadow):
+        shadow_legend(x,y,ctx,width,height,r,canva_width,canva_height)
+
 
     ctx.new_path()
 
@@ -94,6 +100,10 @@ def roundrect_stroke(ctx, x, y, width, height, r,
     ctx.set_source_rgb(sr,sg,sb)
     ctx.fill()
 
+    
+
+
+## Glow and Shadow canvas
 
 def glow_scatter_num_num(properties,main_ctx,width,height):
     properties.glow = False
@@ -143,6 +153,37 @@ def shadow_scatter_num_num(x_data,y_data,main_ctx,dot_radius,shadow_radi,width,h
 
     main_ctx.set_source_surface(shadow_made_surface,0,0)
     main_ctx.paint()
+
+
+def shadow_legend(x,y,ctx,width,height,r,canva_width,canva_height):
+
+    shadow_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, canva_width, canva_height)
+    shadow_ctx = cairo.Context(shadow_surface)
+    shadow_radius = 5
+
+
+    shadow_ctx.new_path()
+
+    x = 0.02*x + x
+    y = -0.01*y + y
+
+    # Rounded rectangle path
+    shadow_ctx.arc(x + r,         y + r,          r, math.pi, 3*math.pi/2)
+    shadow_ctx.arc(x + width - r, y + r,          r, 3*math.pi/2, 0)
+    shadow_ctx.arc(x + width - r, y + height - r, r, 0, math.pi/2)
+    shadow_ctx.arc(x + r,         y + height - r, r, math.pi/2, math.pi)
+    shadow_ctx.close_path()
+
+    shadow_ctx.set_source_rgba(0, 0, 0, 0.7)
+    shadow_ctx.fill_preserve()  
+
+    shadow_surface.flush()
+
+    shadow_made_surface = blur_cairo_surface(shadow_surface,blur_radius=shadow_radius)
+
+    ctx.set_source_surface(shadow_made_surface,0,0)
+    ctx.paint()
+
 
 
 def blur_cairo_surface(cairo_surface, blur_radius):

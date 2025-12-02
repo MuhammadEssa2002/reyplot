@@ -175,6 +175,9 @@ class Draw_Legend:
                       text=self.title,
                       text_color=self.properties.text_color,
                       stroke = self.properties.stroke,
-                      stroke_manual_color = self.properties.stroke_manual_color           
+                      stroke_manual_color = self.properties.stroke_manual_color, 
+                      canva_width=self.width,
+                      canva_height=self.height,
+                      shadow = self.properties.shadow       
                       )
             self.block_y_pos=self.block_y_pos + self.block_height + self.block_height/4
