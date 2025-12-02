@@ -5,6 +5,7 @@ df = rp.load_dataset("iris")
 
 chrt = rp.chart(size = [1000,800])
 
-chrt.scatter(data = df, x = "sepal_width", y = "sepal_length",title="Essa")
-chrt.legend(stroke=False)
+chrt.scatter(data = df, x = "sepal_width", y = "sepal_length",title="red")
+chrt.scatter(data=df, x = "sepal_length", y = "petal_width", title = "teal")
+chrt.legend()
 chrt.show()

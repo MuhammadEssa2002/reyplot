@@ -124,7 +124,7 @@ class Draw_Legend:
         self.width_padding = math.sqrt(self.properties.positions[0]**2 + self.properties.positions[1]**2) / 60
         self.height_padding = math.sqrt(self.properties.positions[2]**2 + self.properties.positions[3]**2) / 60
         self.block_color = (1,1,1,0.7)
-        
+       
 
         
         if (self.loc == "top_right"):
@@ -174,7 +174,7 @@ class Draw_Legend:
                       stroke_color=self.stroke_color,
                       text=self.title,
                       text_color=self.properties.text_color,
-                      stroke = self.properties.stroke
-                      
+                      stroke = self.properties.stroke,
+                      stroke_manual_color = self.properties.stroke_manual_color           
                       )
             self.block_y_pos=self.block_y_pos + self.block_height + self.block_height/4

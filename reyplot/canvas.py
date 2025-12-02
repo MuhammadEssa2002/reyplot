@@ -34,10 +34,11 @@ def roundrect(ctx, x, y, width, height, r):
 
 def roundrect_stroke(ctx, x, y, width, height, r,
               text,                
-              text_color,  
+              text_color,
+              stroke_manual_color,
               fill_color=(1, 1, 1, 1),
               stroke_color=(0, 0, 0, 1),
-              stroke = True
+              stroke = True              
               ):
 
     ctx.new_path()
@@ -57,8 +58,11 @@ def roundrect_stroke(ctx, x, y, width, height, r,
     # -------- Stroke (outer color) --------
     sr, sg, sb, sa = stroke_color
     if (stroke):
-        stroke_width = math.sqrt(width**2 + height**2)/50  
-        ctx.set_source_rgba(sr, sg, sb, sa)
+        stroke_width = math.sqrt(width**2 + height**2)/50
+        if (stroke_manual_color):  
+            ctx.set_source_rgba(*stroke_manual_color, sa)
+        else:
+            ctx.set_source_rgba(sr, sg , sb, sa)
         ctx.set_line_width(stroke_width)
     ctx.stroke()
     

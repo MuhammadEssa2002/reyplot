@@ -99,7 +99,7 @@ class Block_Grid:
 
 
 class Legend_layer:
-    def __init__(self,legend_layout,positions,limits,display,location,text_color,stroke):
+    def __init__(self,legend_layout,positions,limits,display,location,text_color,stroke,stroke_color):
         self.legend_layout = legend_layout
         self.positions = positions
         self.limits = limits
@@ -107,6 +107,10 @@ class Legend_layer:
         self.location = location
         self.text_color = __hex_to_rgb_rey__(text_color)
         self.stroke = stroke
+        if (stroke_color == None):
+            self.stroke_manual_color = False
+        else:
+            self.stroke_manual_color = __hex_to_rgb_rey__(stroke_color)
 
     def draw(self,ctx,width,height):
         if (self.display):
@@ -336,11 +340,12 @@ class chart:
 
 
     # Legend method
-    def legend(self,display = True,location = "top_right",text_color = "black",stroke = True):
+    def legend(self,display = True,location = "top_right",text_color = "black",stroke = True,stroke_color = None):
         self.legend_display = display
         self.legend_location = location.lower()
         self.legend_text_color = text_color.lower()
         self.legend_stroke = stroke
+        self.legend_stroke_color = stroke_color
 
     # Creating the scatterPlot method where user can define the main data and columns to work on!
     def scatter(self,
@@ -530,7 +535,8 @@ class chart:
                                  self.legend_display,
                                  self.legend_location,
                                  text_color=self.legend_text_color,
-                                 stroke = self.legend_stroke
+                                 stroke = self.legend_stroke,
+                                 stroke_color = self.legend_stroke_color
                                  )
             self.layers.append(layer) 
 
