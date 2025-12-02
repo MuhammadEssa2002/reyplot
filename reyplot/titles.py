@@ -116,7 +116,7 @@ class Draw_Plot_title:
 
         
         self.ctx.save() # Good practice to isolate state
-        self.ctx.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
+        self.ctx.select_font_face(self.properties.title_font, cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
         self.ctx.set_font_size(self.font_size)
         self.ctx.set_source_rgba(*properties.color, properties.alpha)
 

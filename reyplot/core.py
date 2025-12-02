@@ -65,10 +65,11 @@ class X_Y_titles:
 
 
 class Plot_title:
-    def __init__(self,title,color,alpha):
+    def __init__(self,title,color,alpha,title_font):
         self.title = title
         self.color = __hex_to_rgb_rey__(color)
         self.alpha = alpha
+        self.title_font = title_font
     
     def draw(self,ctx,width,height):
         from .titles import Draw_Plot_title
@@ -326,11 +327,12 @@ class chart:
         self.x_y_titles.y_alpha = alpha
 
     # User define the plot title
-    def title(self,title,color="black",alpha=1):
+    def title(self,title,color="black",alpha=1,font = "Sans"):
         self._OUTER_LAYER_POSTION_.update_y1(2.5)
         self.plot_title.title = title
         self.plot_title.color = color
         self.plot_title.alpha = alpha
+        self.title_font = font
 
     # Block_Grid method
     def block_grid(self,color="#D1D1D1", gradient=True, gradient_color="#000000", alpha=0.4,radius = 1,display = True):
@@ -513,7 +515,8 @@ class chart:
             self.plot_title_flag = True
             layer = Plot_title(title=self.plot_title.title,
                                color=self.plot_title.color,
-                               alpha=self.plot_title.alpha)
+                               alpha=self.plot_title.alpha,
+                               title_font = self.title_font)
             self.layers.append(layer)
 
 
@@ -530,7 +533,7 @@ class chart:
         self.layers.append(layer)
 
 
-        
+       ## Legend 
         if not(self.legend_flag):
             self.legend_flag = True
             layer = Legend_layer(self.legend_layout,

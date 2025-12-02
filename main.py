@@ -7,5 +7,6 @@ chrt = rp.chart(size = [1000,800])
 
 chrt.scatter(data = df, x = "sepal_width", y = "sepal_length",title="red")
 chrt.scatter(data=df, x = "sepal_length", y = "petal_width", title = "teal")
-chrt.legend(location="center_middle")
+chrt.title(title="Iris DataSet",font="Bruno Ace")
+chrt.legend(shadow=True)
 chrt.show()
