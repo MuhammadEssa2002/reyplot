@@ -37,6 +37,7 @@ def roundrect_stroke(ctx, x, y, width, height, r,
               text_color,  
               fill_color=(1, 1, 1, 1),
               stroke_color=(0, 0, 0, 1),
+              stroke = True
               ):
 
     ctx.new_path()
@@ -54,10 +55,11 @@ def roundrect_stroke(ctx, x, y, width, height, r,
     ctx.fill_preserve()  # fill but keep the path
 
     # -------- Stroke (outer color) --------
-    stroke_width = math.sqrt(width**2 + height**2)/50
     sr, sg, sb, sa = stroke_color
-    ctx.set_source_rgba(sr, sg, sb, sa)
-    ctx.set_line_width(stroke_width)
+    if (stroke):
+        stroke_width = math.sqrt(width**2 + height**2)/50  
+        ctx.set_source_rgba(sr, sg, sb, sa)
+        ctx.set_line_width(stroke_width)
     ctx.stroke()
     
     # -------- Text (Centered) --------
