@@ -227,6 +227,7 @@ class chart:
         # Creating the Plot_title
         from .titles import Plot_title
         self.plot_title = Plot_title()
+        self.title_font = "Sans"
         # Sitting the defult values of the plot title
         self.plot_title.title = ""
         self.plot_title.color = "black"
@@ -333,6 +334,7 @@ class chart:
         self.plot_title.color = color
         self.plot_title.alpha = alpha
         self.title_font = font
+        
 
     # Block_Grid method
     def block_grid(self,color="#D1D1D1", gradient=True, gradient_color="#000000", alpha=0.4,radius = 1,display = True):
