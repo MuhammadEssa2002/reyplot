@@ -103,7 +103,100 @@ def roundrect_stroke(ctx, x, y, width, height, r,canva_width,canva_height,
     
 
 
+# ------------------------- CIRCLE ------------------------- #
+def draw_circle(ctx, x, y, r, color, alpha, glow_gradient):
+    ctx.new_path()
+    ctx.arc(x, y, r, 0, 2 * math.pi)
+
+    _apply_color_or_glow(ctx, x, y, r, color, alpha, glow_gradient)
+
+    ctx.fill_preserve()
+
+
+
+# ------------------------- DIAMOND ------------------------- #
+def draw_diamond(ctx, x, y, r, color, alpha, glow_gradient):
+    ctx.new_path()
+    ctx.move_to(x, y - r)        # top
+    ctx.line_to(x + r, y)        # right
+    ctx.line_to(x, y + r)        # bottom
+    ctx.line_to(x - r, y)        # left
+    ctx.close_path()
+
+    _apply_color_or_glow(ctx, x, y, r, color, alpha, glow_gradient)
+
+    ctx.fill_preserve()
+
+
+
+# ------------------------- HEXAGON ------------------------- #
+def draw_hexagon(ctx, x, y, r, color, alpha, glow_gradient):
+    ctx.new_path()
+    for i in range(6):
+        angle = math.radians(60 * i - 30)
+        px = x + r * math.cos(angle)
+        py = y + r * math.sin(angle)
+        if i == 0:
+            ctx.move_to(px, py)
+        else:
+            ctx.line_to(px, py)
+    ctx.close_path()
+
+    _apply_color_or_glow(ctx, x, y, r, color, alpha, glow_gradient)
+
+    ctx.fill_preserve()
+
+
+
+# ------------------------- TRIANGLE ------------------------- #
+def draw_triangle(ctx, x, y, r, color, alpha, glow_gradient):
+    ctx.new_path()
+    for i in range(3):
+        angle = math.radians(120 * i - 90)
+        px = x + r * math.cos(angle)
+        py = y + r * math.sin(angle)
+        if i == 0:
+            ctx.move_to(px, py)
+        else:
+            ctx.line_to(px, py)
+    ctx.close_path()
+
+    _apply_color_or_glow(ctx, x, y, r, color, alpha, glow_gradient)
+
+    ctx.fill_preserve()
+
+
+
+# ------------------------- SQUARE ------------------------- #
+def draw_square(ctx, x, y, r, color, alpha, glow_gradient):
+    ctx.new_path()
+    ctx.rectangle(x - r, y - r, r * 2, r * 2)
+
+    _apply_color_or_glow(ctx, x, y, r, color, alpha, glow_gradient)
+
+    ctx.fill_preserve()
+
+
 ## Glow and Shadow canvas
+
+def _apply_color_or_glow(ctx, x, y, r, color, alpha, glow_gradient):
+    if glow_gradient:
+        pat = cairo.RadialGradient(
+            x, y, r/2,
+            x, y, r*2
+        )
+
+        # center glow (white)
+        pat.add_color_stop_rgba(0, 1, 1, 1, 1)
+
+        # outer color
+        pat.add_color_stop_rgba(1, *color, 1)
+
+        ctx.set_source(pat)
+
+    else:
+        ctx.set_source_rgba(*color, alpha)
+
 
 def glow_scatter_num_num(properties,main_ctx,width,height):
     properties.glow = False

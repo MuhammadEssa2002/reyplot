@@ -10,6 +10,7 @@ class _Draw_Scatter_():
         self._ctx_ = context
         self.width = width
         self.height = height
+        self.dot_style = "h"
 
         
         self.x_pixels = map_polars_to_pixels(
@@ -41,41 +42,83 @@ class _Draw_Scatter_():
             from .canvas import glow_scatter_num_num
             glow_scatter_num_num(properties=properties , main_ctx= self._ctx_, width= self.width, height= self.height)
 
+        from .canvas import draw_hexagon, draw_circle, draw_diamond, draw_square, draw_triangle
 
         for x , y in zip (self.x_pixels,self.y_pixels):
-            self._ctx_.arc(x , y , dot_radius , 0, 2 * math.pi)
-            if (self.properties.glow_gradient):
-                pat = cairo.RadialGradient(x,
-                                       
-                                           y,
-
-                                           dot_radius/2,
-                                       
-                                           x,
-
-                                           y,
-
-                                           dot_radius*2)
-
-                pat.add_color_stop_rgba(0,
-                                        1,
-                                        1,
-                                        1,
-                                        1)
-
-                pat.add_color_stop_rgba(1,
-                                        *self.properties.scatter_color,
-                                        1)
-
-                self._ctx_.set_source(pat)
-            
+            if (self.dot_style == "h"):
+                draw_hexagon(self._ctx_,
+                             x,
+                             y,
+                             dot_radius,
+                             color=self.properties.scatter_color,
+                             alpha=self.properties.alpha,
+                             glow_gradient=self.properties.glow_gradient)
+            elif(self.dot_style == "c"):
+                draw_circle(self._ctx_,
+                             x,
+                             y,
+                             dot_radius,
+                             color=self.properties.scatter_color,
+                             alpha=self.properties.alpha,
+                             glow_gradient=self.properties.glow_gradient)
+            elif(self.dot_style == "d"):
+                draw_diamond(self._ctx_,
+                             x,
+                             y,
+                             dot_radius,
+                             color=self.properties.scatter_color,
+                             alpha=self.properties.alpha,
+                             glow_gradient=self.properties.glow_gradient)
+            elif(self.dot_style == "s"):
+                draw_square(self._ctx_,
+                             x,
+                             y,
+                             dot_radius,
+                             color=self.properties.scatter_color,
+                             alpha=self.properties.alpha,
+                             glow_gradient=self.properties.glow_gradient)
+            elif(self.dot_style == "t"):
+                draw_triangle(self._ctx_,
+                             x,
+                             y,
+                             dot_radius,
+                             color=self.properties.scatter_color,
+                             alpha=self.properties.alpha,
+                             glow_gradient=self.properties.glow_gradient)
             else:
-                self._ctx_.set_source_rgba(self.properties.scatter_color[0],
-                                       self.properties.scatter_color[1],
-                                       self.properties.scatter_color[2],
-                                       self.properties.alpha)    
+                self._ctx_.arc(x , y , dot_radius , 0, 2 * math.pi)
+                if (self.properties.glow_gradient):
+                    pat = cairo.RadialGradient(x,
+                                        
+                                            y,
+
+                                            dot_radius/2,
+                                        
+                                            x,
+
+                                            y,
+
+                                            dot_radius*2)
+
+                    pat.add_color_stop_rgba(0,
+                                            1,
+                                            1,
+                                            1,
+                                            1)
+
+                    pat.add_color_stop_rgba(1,
+                                            *self.properties.scatter_color,
+                                            1)
+
+                    self._ctx_.set_source(pat)
                 
-            self._ctx_.fill_preserve()
+                else:
+                    self._ctx_.set_source_rgba(self.properties.scatter_color[0],
+                                        self.properties.scatter_color[1],
+                                        self.properties.scatter_color[2],
+                                        self.properties.alpha)    
+                    
+                self._ctx_.fill_preserve()
 
 
             if (self.properties.stroke):
