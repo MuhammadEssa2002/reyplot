@@ -10,7 +10,7 @@
 
 [Update the pics and do some correction of the docs]
 
-[ Update the legend dot shape when the scatter plot change it's shape]
+[ Update the legend dot shape when the scatter plot change it's shape] ----> Done
 
 [ Add the background image which is important now with blur effect]
 

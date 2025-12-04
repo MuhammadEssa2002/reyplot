@@ -156,7 +156,6 @@ class Draw_Legend:
              self.block_y_pos = self.properties.positions[3] - (self.properties.positions[3] - self.properties.positions[2])/2 - len(self.properties.legend_layout)*(self.block_height + self.block_height/4)/2
 
 
-
         from .canvas import roundrect_stroke
 
         for i in range(len(self.properties.legend_layout)):
@@ -178,6 +177,7 @@ class Draw_Legend:
                       stroke_manual_color = self.properties.stroke_manual_color, 
                       canva_width=self.width,
                       canva_height=self.height,
-                      shadow = self.properties.shadow       
+                      shadow = self.properties.shadow,
+                      dot_shape = self.properties.legend_layout.LEGEND["type"][i] 
                       )
             self.block_y_pos=self.block_y_pos + self.block_height + self.block_height/4

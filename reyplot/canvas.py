@@ -37,6 +37,7 @@ def roundrect_stroke(ctx, x, y, width, height, r,canva_width,canva_height,
               text_color,
               stroke_manual_color,
               shadow,
+              dot_shape,
               fill_color=(1, 1, 1, 1),
               stroke_color=(0, 0, 0, 1),
               stroke = True            
@@ -95,9 +96,48 @@ def roundrect_stroke(ctx, x, y, width, height, r,canva_width,canva_height,
 
         ctx.move_to(text_x, text_y)
         ctx.show_text(text)
-    
-    ctx.arc(x + width/10, y + height/2 ,height/4,0,2*math.pi)
-    ctx.set_source_rgb(sr,sg,sb)
+    if (dot_shape == "s_s"):
+        draw_square(ctx,
+                    x = x+width/10,
+                    y = y+height/2,
+                    r = height/4,
+                    color = (sr,sg,sb),
+                    glow_gradient = False,
+                    alpha = 1)
+    elif(dot_shape == "s_c"):
+        draw_circle(ctx,
+                    x = x+width/10,
+                    y = y+height/2,
+                    r = height/4,
+                    color = (sr,sg,sb),
+                    glow_gradient = False,
+                    alpha = 1)
+    elif(dot_shape == "s_h"):
+        draw_hexagon(ctx,
+                    x = x+width/10,
+                    y = y+height/2,
+                    r = height/4,
+                    color = (sr,sg,sb),
+                    glow_gradient = False,
+                    alpha = 1)
+    elif(dot_shape == "s_t"):
+        draw_triangle(ctx,
+                    x = x+width/10,
+                    y = y+height/2,
+                    r = height/4,
+                    color = (sr,sg,sb),
+                    glow_gradient = False,
+                    alpha = 1)
+    elif(dot_shape == "s_d"):
+        draw_diamond(ctx,
+                    x = x+width/10,
+                    y = y+height/2,
+                    r = height/4,
+                    color = (sr,sg,sb),
+                    glow_gradient = False,
+                    alpha = 1)
+
+
     ctx.fill()
 
     

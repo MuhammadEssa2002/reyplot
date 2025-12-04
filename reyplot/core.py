@@ -373,7 +373,6 @@ class chart:
                     title = None,
                     dot_shape = "c"
                     ):
-        
         # Checking the x_y data
         if (not(isinstance(data,pl.DataFrame)) and not(isinstance(x,str)) and not(isinstance(y,str))):
             from .validators import check_type
@@ -405,7 +404,20 @@ class chart:
         self.x_y_titles.update_y_title(y)
 
         if (isinstance(title,str)):
-            self.legend_layout.add_legend(title=title, type="scatter",color=color)
+            if (dot_shape == "c"):
+                self.legend_layout.add_legend(title=title, type="s_c",color=color)
+            elif (dot_shape == "t"):
+                self.legend_layout.add_legend(title=title, type="s_t",color=color)
+            elif(dot_shape == "s"):
+                self.legend_layout.add_legend(title=title, type="s_s",color=color)
+            elif(dot_shape == "h"):
+                self.legend_layout.add_legend(title=title, type="s_h",color=color)
+            elif(dot_shape == "d"):
+                self.legend_layout.add_legend(title=title, type="s_d",color=color)
+                
+
+
+
             
 
         layer = ScatterPlot(data=data,
