@@ -14,6 +14,25 @@ from .validators import validate_limits
 
 
 
+class Background_Image:
+    def __init__(self,path,blur,alpha,layer,positions = 0):
+        self.path = path
+        self.blur = blur
+        self.alpha = alpha
+        self.layer = layer
+        self.positions = positions
+    def draw(self,ctx,width,height):
+        if not(self.path == None):
+            if (self.layer == "inner"):
+                from .background_image import Draw_inner_image
+                Draw_inner_image(self,ctx,width,height)
+            
+
+            elif(self.layer == "outer"):
+                from .background_image import Draw_outer_image
+                Draw_outer_image(self,ctx,width,height)
+
+
 
 
 class InnerLayer:
@@ -51,13 +70,15 @@ class OuterLayer:
 
 
 class X_Y_titles:
-    def __init__(self,x_title,y_title,x_color,y_color,x_alpha,y_alpha):
+    def __init__(self,x_title,y_title,x_color,y_color,x_alpha,y_alpha,x_font,y_font):
         self.x_title = x_title
         self.y_title = y_title
         self.x_color = __hex_to_rgb_rey__(x_color)
         self.y_color = __hex_to_rgb_rey__(y_color)
         self.x_alpha = x_alpha
         self.y_alpha = y_alpha
+        self.x_font = x_font
+        self.y_font = y_font
     
     def draw(self,ctx,width,height):
         from .titles import Draw_X_Y_titles
@@ -210,7 +231,6 @@ class chart:
         self.height = self.orignal_height
         
         self.scale = scale
-        self.background_image_path = None
         
         # Creating the outer layer layout
         from .layout import OuterLayerPostion
@@ -220,10 +240,6 @@ class chart:
         from .titles import X_Y_titles
         self.x_y_titles = X_Y_titles()
         # Sitting the defult values of x and y title
-        self.x_y_titles.x_color = "black"
-        self.x_y_titles.x_alpha = 1
-        self.x_y_titles.y_color = "black"
-        self.x_y_titles.y_alpha = 1
         self.x_y_titles_flag = False
 
         # Creating the Plot_title
@@ -249,7 +265,7 @@ class chart:
 
 
         self.inner_layer(color="#EEEEEE")
-        
+        self.background_image() 
 
         # intializing the block_grid
         self.block_grid_layer = Block_Grid(color="#D1D1D1",gradient=True,gradient_color="black",alpha=0.4,radius=1)
@@ -263,8 +279,17 @@ class chart:
 
 
 
-
-
+    #The background_image
+    def background_image(self,path = None,blur = 0,alpha = 1):
+        self.background_image_path = path
+        self.background_image_blur = blur
+        self.background_image_alpha = alpha
+        layer = Background_Image(path = self.background_image_path ,blur = blur,alpha = alpha, layer = "inner")
+        for i, L in enumerate(self.layers):
+            if isinstance(L,Background_Image):
+                self.layers[i] = layer
+                return
+        self.layers.append(layer)
 
 
     # This is inner layer method which takes mantual data from user
@@ -314,20 +339,22 @@ class chart:
 
 
     # User define the plot x_title
-    def x_title(self, x_title = None, color = "black",alpha = 1):
+    def x_title(self, x_title = None, color = "black",alpha = 1,font = "Sans"):
         if not(x_title == None):
             self.x_y_titles.update_x_title_manual(x_title=x_title)
         
         self.x_y_titles.x_color  = color
         self.x_y_titles.x_alpha = alpha
+        self.x_y_titles.x_font = font
     
     # User define the plot y_title
-    def y_title(self,y_title = None, color = "black", alpha = 1):
+    def y_title(self,y_title = None, color = "black", alpha = 1,font = "Sans"):
         if not (y_title == None):
             self.x_y_titles.update_y_title_manual(y_title= y_title)
         
         self.x_y_titles.y_color = color
         self.x_y_titles.y_alpha = alpha
+        self.x_y_titles.y_font = font
 
     # User define the plot title
     def title(self,title,color="black",alpha=1,font = "Sans"):
@@ -511,7 +538,16 @@ class chart:
                 self.layers.append(layer)
 
 
-
+        #Creating the outerlayer background_image
+        if not (self.background_image_path == None):
+            layer = Background_Image(path = self.background_image_path,
+                                     blur = self.background_image_blur,
+                                     alpha = self.background_image_alpha,
+                                     layer = "outer",
+                                     positions = self._OUTER_LAYER_POSTION_.postion()
+                                     )
+            self.layers.append(layer)
+            self.background_image_path = None
         # Updating the block_grid
         self.block_grid_layer.positions = self._OUTER_LAYER_POSTION_.postion()
         self.block_grid_layer.limits = self._OUTER_LAYER_POSTION_.limits()
@@ -535,7 +571,9 @@ class chart:
                                x_color=self.x_y_titles.x_color,
                                y_color=self.x_y_titles.y_color,
                                x_alpha=self.x_y_titles.x_alpha,
-                               y_alpha=self.x_y_titles.y_alpha)
+                               y_alpha=self.x_y_titles.y_alpha,
+                               x_font =self.x_y_titles.x_font,
+                               y_font =self.x_y_titles.y_font)
             self.layers.append(layer)
 
         # Creating the plot title layer
@@ -691,6 +729,7 @@ class chart:
         label.pack()
         
         _ROOT_.mainloop()
+
 
 
 

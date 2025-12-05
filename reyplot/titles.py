@@ -6,10 +6,12 @@ class X_Y_titles:
         # 1. FIX: Added default colors/alpha so the draw class doesn't crash
         self._x_title = None
         self._y_title = None
-        self.x_color = None
-        self.x_alpha = None
-        self.y_color = None
-        self.y_alpha = None
+        self.x_color = "black" 
+        self.x_alpha = 1
+        self.y_color = "black"
+        self.y_alpha = 1
+        self.x_font = "Sans"
+        self.y_font = "Sans"
     
     def update_x_title(self, x_title):
         if self._x_title is None:
@@ -48,7 +50,7 @@ class Draw_X_Y_titles: # Fixed typo 'tiles' -> 'titles'
         # --- Draw X Title ---
         if properties.x_title:
             self.ctx.save() # Good practice to isolate state
-            self.ctx.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
+            self.ctx.select_font_face(properties.x_font, cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
             self.ctx.set_font_size(self.font_size)
             self.ctx.set_source_rgba(*properties.x_color, properties.x_alpha)
 
@@ -66,7 +68,7 @@ class Draw_X_Y_titles: # Fixed typo 'tiles' -> 'titles'
         # --- Draw Y Title ---
         if properties.y_title:
             self.ctx.save() # 3. FIX: Save context state before rotation
-            self.ctx.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
+            self.ctx.select_font_face(properties.y_font, cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
             self.ctx.set_font_size(self.font_size)
             self.ctx.set_source_rgba(*properties.y_color, properties.y_alpha)
 

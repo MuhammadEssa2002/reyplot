@@ -3,20 +3,31 @@ import reyplot as rp
 
 df = rp.load_dataset("iris")
 
-chrt = rp.chart(size = [1000,800])
 
-chrt.scatter(data=df,
-             x="sepal_width",
-             y="sepal_length",
-             dot_shape = "t",
-             title = "Essa"
+iris = rp.chart(size = [1280,720])
+
+iris.scatter(data = df,
+             x = "sepal_width",
+             y = "sepal_length",
+             title = "sepal_width vs. sepal_length",
+             color = "yellow",
+             glow =True
              )
-chrt.scatter(data = df,
-             x="sepal_width",
-             y="petal_length",
-             dot_shape="h",
-             title = "Danish")
-chrt.legend(shadow=True)
-chrt.title("Iris Data", font = "Bruno Ace")
 
-chrt.show()
+iris.background_image(path = "img3.jpg")
+
+iris.inner_layer(color = "gray", gradient=True)
+iris.outer_layer(color = "gray", gradient=True)
+
+
+iris.axes(color = "white")
+
+iris.x_title(color = "white")
+
+iris.y_title(color = "white")
+
+iris.title(title = "Iris Data", color = "white")
+
+iris.legend(shadow=True)
+
+iris.show()

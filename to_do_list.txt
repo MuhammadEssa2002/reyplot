@@ -14,6 +14,5 @@
 
 [ Add the background image which is important now with blur effect]
 
-[ Add shadow in the background of plot title and x_y titles]
-
+[ Add the font parameter for the x_y titles] -----> Done
 
