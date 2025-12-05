@@ -16,3 +16,8 @@
 
 [ Add the font parameter for the x_y titles] -----> Done
 
+[ Make the legend better for bigger Resulations ]
+
+[ Add the background_image into docs]
+
+----------END---------------------------------------------------------------------------------------------------------------------

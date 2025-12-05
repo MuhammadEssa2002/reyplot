@@ -4,7 +4,7 @@ import reyplot as rp
 df = rp.load_dataset("iris")
 
 
-iris = rp.chart(size = [1280,720])
+iris = rp.chart(size = [3840,2159])
 
 iris.scatter(data = df,
              x = "sepal_width",
