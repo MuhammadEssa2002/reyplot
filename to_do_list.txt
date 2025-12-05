@@ -12,7 +12,7 @@
 
 [ Update the legend dot shape when the scatter plot change it's shape] ----> Done
 
-[ Add the background image which is important now with blur effect]
+[ Add the background image which is important now with blur effect] -----> Done
 
 [ Add the font parameter for the x_y titles] -----> Done
 

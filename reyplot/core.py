@@ -478,12 +478,7 @@ class chart:
 
     def _create_surface(self):
         """Helper to set up the Cairo surface and context."""
-        if self.background_image_path and os.path.exists(self.background_image_path):
-            bg_surface = cairo.ImageSurface.create_from_png(self.background_image_path)
-            # (Note: This demo doesn't resize figure to image, but it could)
-            self.width = bg_surface.get_width()
-            self.height = bg_surface.get_height()
-        
+                
         surface = cairo.ImageSurface(cairo.FORMAT_RGB24,
                                      round(self.width * self.scale),
                                      round(self.height * self.scale))
