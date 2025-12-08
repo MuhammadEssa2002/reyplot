@@ -112,15 +112,19 @@ class Draw_Legend:
         self.ctx = context
         self.width = width
         self.height = height
+        self.inner_width = (self.properties.positions[1] - self.properties.positions[0])
+        self.inner_height = (self.properties.positions[2] - self.properties.positions[3])
+        self.diagonal_line = 0.2*math.sqrt(self.inner_width**2 + self.inner_height**2)
+        self.angle = math.pi/30
         ## Finding the max length letter
         self.max_text_length = 0
         for i in range(len(self.properties.legend_layout)):
             self.max_text_length = max(self.max_text_length,len(self.properties.legend_layout.LEGEND["title"][i]))
         
         self.loc = self.properties.location
-        self.block_width = math.sqrt(self.properties.positions[0]**2 + self.properties.positions[1]**2)/6 + self.max_text_length*math.sqrt(self.properties.positions[0]**2 + self.properties.positions[1]**2)/500
-        self.block_height = math.sqrt(self.properties.positions[2]**2 + self.properties.positions[3]**2)/25
-        self.radius_block =   math.sqrt(self.properties.positions[0]**2 + self.properties.positions[1]**2) *  math.sqrt(self.properties.positions[2]**2 + self.properties.positions[3]**2)/85000
+        self.block_width = math.cos(self.angle) * self.diagonal_line
+        self.block_height = math.sin(self.angle) * self.diagonal_line
+        self.radius_block =  math.sqrt(self.inner_width**2 + self.inner_height**2)/100 
         self.width_padding = math.sqrt(self.properties.positions[0]**2 + self.properties.positions[1]**2) / 60
         self.height_padding = math.sqrt(self.properties.positions[2]**2 + self.properties.positions[3]**2) / 60
         self.block_color = (1,1,1,0.7)

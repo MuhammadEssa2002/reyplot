@@ -12,8 +12,8 @@ class Draw_Block_Grid:
         self.inner_layer_height = abs(self.properties.positions[3] - self.properties.positions[2])
         from .axes import calculate_ticks
         from .canvas import roundrect
-        self.block_gap = (self.inner_layer_width**2 + self.inner_layer_height**2)/150000
-        self.block_radius = self.properties.block_radius * (self.inner_layer_width**2 + self.inner_layer_height**2)/20000
+        self.block_gap = math.sqrt(self.inner_layer_width**2 + self.inner_layer_height**2)/200
+        self.block_radius = self.properties.block_radius * math.sqrt(self.inner_layer_width**2 + self.inner_layer_height**2)/40
         self.block_gradient_radius = (self.inner_layer_width**2 + self.inner_layer_height**2)/10000
         calculated_width = 0.1 * (self.height * self.width) / 540000
         self.line_width = max(1.0, calculated_width)
