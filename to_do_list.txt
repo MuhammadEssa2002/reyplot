@@ -8,7 +8,7 @@
 
 [ Udate the docs for the plot title, now it can take font parameter]
 
-[Update the pics and do some correction of the docs]
+[ Update the pics and do some correction of the docs] ----- Done
 
 [ Update the legend dot shape when the scatter plot change it's shape] ----> Done
 
@@ -18,6 +18,6 @@
 
 [ Make the legend better for bigger Resulations ] ----> Done
 
-[ Add the background_image into docs]
+[ Add the background_image into docs]  ----- Done
 
 ----------END---------------------------------------------------------------------------------------------------------------------

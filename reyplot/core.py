@@ -280,11 +280,11 @@ class chart:
 
 
     #The background_image
-    def background_image(self,path = None,blur = 0,alpha = 1):
+    def background_image(self,path = None,blur = 0):
         self.background_image_path = path
         self.background_image_blur = blur
-        self.background_image_alpha = alpha
-        layer = Background_Image(path = self.background_image_path ,blur = blur,alpha = alpha, layer = "inner")
+        self.background_image_alpha = 1
+        layer = Background_Image(path = self.background_image_path ,blur = blur,alpha = 1, layer = "inner")
         for i, L in enumerate(self.layers):
             if isinstance(L,Background_Image):
                 self.layers[i] = layer
