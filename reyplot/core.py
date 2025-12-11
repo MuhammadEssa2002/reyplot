@@ -179,7 +179,8 @@ class ScatterPlot:
         self.postions = None
         self.limits = None
         self.dot_shape  = dot_shape
-        self.color_by_data = self.data[color_by]
+        if not(color_by == None):
+            self.color_by_data = self.data[color_by]
         self.color_range_min = __hex_to_rgb_rey__(color_range[0])
         self.color_range_max = __hex_to_rgb_rey__(color_range[1])
         self.simple_scatter = simpe_scatter

@@ -2,16 +2,21 @@ import reyplot as rp
 
 df = rp.load_dataset("iris")
 
-iris = rp.chart(size = [1000,800])
+iris = rp.chart(size = [1280,720])
 
 iris.scatter(data = df,
-             x = "sepal_width",
-             y = "sepal_length",
-             color_by = "petal_length",
-             color_range = ("yellow","cyan")
+             x = "petal_width",
+             y = "petal_length",
+             color = "yellow",
+             alpha = 1,
+             glow = True,
+             title = "petal_width Vs. petal_length"
              )
 
-iris.title("Iris Data")
-iris.inner_layer(color = "gray", gradient = True)
-iris.outer_layer(color = "gray", gradient = True) 
-iris.show()
+iris.background_image(path = "img.jpg",blur = 4)
+iris.title(title = "Iris Data",color = "white", font = "Bruno Ace")
+iris.x_title(color = "white", font = "Bruno Ace")
+iris.y_title(color = "white", font = "Bruno Ace")
+iris.legend(location= "top_left")
+iris.axes(color = "white")
+iris.save("reyplot.png")
