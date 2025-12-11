@@ -255,8 +255,8 @@ def glow_scatter_num_num(properties,main_ctx,width,height):
     glow_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
     glow_ctx = cairo.Context(glow_surface)
 
-    from .scatter_plot import _Draw_Scatter_
-    _Draw_Scatter_(properties = properties , context = glow_ctx, width = width, height = height)
+    from .scatter_plot import _Draw_Simple_Scatter_
+    _Draw_Simple_Scatter_(properties = properties , context = glow_ctx, width = width, height = height)
 
     glow_surface.flush()
 
@@ -286,6 +286,93 @@ def shadow_scatter_num_num(x_data,y_data,main_ctx,dot_radius,shadow_radi,width,h
 
     main_ctx.set_source_surface(shadow_made_surface,0,0)
     main_ctx.paint()
+
+
+
+
+
+
+
+def shadow_single_scatter_num_num(x,y,main_ctx,dot_radius,shadow_radi,width,height):
+
+    shadow_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
+    shadow_ctx = cairo.Context(shadow_surface)
+    shadow_radius = shadow_radi*5
+
+    shadow_ctx.arc(0.02* x + x , -0.01*y + y , 1.2*dot_radius , 0,2*math.pi)
+    shadow_ctx.set_source_rgba(0,0,0,0.7)
+    shadow_ctx.fill()
+    shadow_surface.flush()
+
+    shadow_made_surface = blur_cairo_surface(shadow_surface,blur_radius=shadow_radius)
+
+    main_ctx.set_source_surface(shadow_made_surface,0,0)
+    main_ctx.paint()
+
+
+
+def glow_single_scatter_num_num(x,y,main_ctx,dot_radius,shadow_radi,width,height,color):
+
+    shadow_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
+    shadow_ctx = cairo.Context(shadow_surface)
+    shadow_radius = shadow_radi*5
+
+    shadow_ctx.arc(x , y , 1.2*dot_radius , 0,2*math.pi)
+    shadow_ctx.set_source_rgba(*color,0.5)
+    shadow_ctx.fill()
+    shadow_surface.flush()
+
+    shadow_made_surface = blur_cairo_surface(shadow_surface,blur_radius=shadow_radius)
+
+    main_ctx.set_source_surface(shadow_made_surface,0,0)
+    main_ctx.paint()
+
+
+
+
+
+
+
+def single_scatter_num_num(ctx,
+                           x,
+                           y,
+                           dot_radius,
+                           dot_shape,
+                           width,
+                           height,
+                           shadow,
+                           shadow_radius,
+                           color,
+                           alpha,
+                           glow_gradient
+                           ):
+
+    
+    if (shadow):
+        shadow_single_scatter_num_num(x , y, ctx, dot_radius, shadow_radius, width, height)
+
+    if (dot_shape == "c"):
+        draw_circle(ctx, x, y, dot_radius, color, alpha, glow_gradient)
+    if (dot_shape == "h"):
+        draw_hexagon(ctx, x, y, dot_radius, color, alpha, glow_gradient)
+    if (dot_shape == "s"):
+        draw_square(ctx, x, y, dot_radius, color, alpha, glow_gradient)
+    if (dot_shape == "t"):
+        draw_triangle(ctx, x, y, dot_radius, color, alpha, glow_gradient)
+    if (dot_shape == "d"):
+        draw_diamond(ctx, x, y, dot_radius, color, alpha, glow_gradient)
+
+    if(glow_gradient):
+        glow_single_scatter_num_num(x,y,ctx,dot_radius,2,width,height,color)
+
+    
+
+
+
+
+
+
+
 
 
 def shadow_legend(x,y,ctx,width,height,r,canva_width,canva_height):

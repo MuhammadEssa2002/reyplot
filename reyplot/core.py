@@ -158,7 +158,11 @@ class ScatterPlot:
                  glow,
                  shadow,
                  shadow_radius,
-                 dot_shape):
+                 dot_shape,
+                 color_by,
+                 color_range,
+                 simpe_scatter
+                 ):
         
         self.glow = glow
         self.data = data
@@ -175,11 +179,19 @@ class ScatterPlot:
         self.postions = None
         self.limits = None
         self.dot_shape  = dot_shape
+        self.color_by_data = self.data[color_by]
+        self.color_range_min = __hex_to_rgb_rey__(color_range[0])
+        self.color_range_max = __hex_to_rgb_rey__(color_range[1])
+        self.simple_scatter = simpe_scatter
 
 
     def draw(self,ctx,width,height):
-        from .scatter_plot import _Draw_Scatter_
-        _Draw_Scatter_(self,ctx,width,height)
+        if (self.simple_scatter):
+            from .scatter_plot import _Draw_Simple_Scatter_
+            _Draw_Simple_Scatter_(self,ctx,width,height)
+        else:
+            from .scatter_plot import Draw_scatter_num_num
+            Draw_scatter_num_num(self,ctx,width,height)
     
     def update_limts(self,lims):
         self.limits = lims
@@ -398,8 +410,16 @@ class chart:
                     shadow = False,
                     shadow_radius = 1,
                     title = None,
-                    dot_shape = "c"
+                    dot_shape = "c",
+                    color_by = None,
+                    color_range = ("maroon" , "cyan")
                     ):
+        
+            
+        self.simple_scatter = True
+        self.color_by_scatter = color_by
+        self.color_range_scatter = color_range
+
         # Checking the x_y data
         if (not(isinstance(data,pl.DataFrame)) and not(isinstance(x,str)) and not(isinstance(y,str))):
             from .validators import check_type
@@ -424,6 +444,8 @@ class chart:
         # Giving scatter color auto
         if (color == None):
             color = self.scatter_color_selector.give_color()
+
+
         data = data.drop_nans()
 
         # Calling the x_y_titles for the plot titles
@@ -445,7 +467,9 @@ class chart:
 
 
 
-            
+        ## Color_by codes
+        if isinstance(color_by,str):
+            self.simple_scatter = False
 
         layer = ScatterPlot(data=data,
                             x=x,
@@ -458,7 +482,11 @@ class chart:
                             glow=glow,
                             shadow=shadow,
                             shadow_radius=shadow_radius,
-                            dot_shape = dot_shape)
+                            dot_shape = dot_shape,
+                            color_by = self.color_by_scatter,
+                            color_range = self.color_range_scatter,
+                            simpe_scatter = self.simple_scatter
+                            )
         self.layers.append(layer)
 
         self._OUTER_LAYER_POSTION_.update_min_max_x(data.select(x))

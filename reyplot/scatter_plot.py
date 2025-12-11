@@ -1,7 +1,7 @@
 import cairo
 import math
 
-class _Draw_Scatter_():
+class _Draw_Simple_Scatter_():
     def __init__(self,properties,context,width,height):
         from .pixel_mapper import map_polars_to_pixels
         from .canvas import calculate_dynamic_radius
@@ -128,3 +128,67 @@ class _Draw_Scatter_():
                                             self.properties.scatter_color[2]
                                             )
             self._ctx_.stroke()
+
+
+
+
+
+
+
+class Draw_scatter_num_num:
+     def __init__(self,properties,context,width,height):
+        from .pixel_mapper import map_polars_to_pixels
+        from .canvas import calculate_dynamic_radius
+        from .canvas import single_scatter_num_num
+        from .color_mapper import map_color 
+
+        self.properties = properties
+        self._ctx_ = context
+        self.width = width
+        self.height = height
+        self.min_color_data = self.properties.color_by_data.min()
+        self.max_color_data = self.properties.color_by_data.max()
+
+        
+        self.x_pixels = map_polars_to_pixels(
+            self.properties.X_data,
+            self.properties.limits[0],
+            self.properties.limits[1],
+            self.properties.postions[0],
+            self.properties.postions[1]
+        )
+
+        
+        self.y_pixels = map_polars_to_pixels(
+            self.properties.Y_data,
+            self.properties.limits[2],
+            self.properties.limits[3],
+            self.properties.postions[2],
+            self.properties.postions[3]
+        )
+        
+        
+        dot_radius = calculate_dynamic_radius(self.width,self.height,len(self.x_pixels),self.properties.dot_size)
+
+        for x , y , c in zip (self.x_pixels,self.y_pixels, self.properties.color_by_data):
+            color = map_color(c,
+                              self.min_color_data,
+                              self.max_color_data,
+                              self.properties.color_range_min,
+                              self.properties.color_range_max
+                              )
+
+
+            single_scatter_num_num(self._ctx_,
+                                   x,
+                                   y,
+                                   dot_radius,
+                                   "c",
+                                   self.width,
+                                   self.height,
+                                   False,
+                                   self.properties.shadow_radius,
+                                   color,
+                                   self.properties.alpha,
+                                   self.properties.glow 
+                                   )
