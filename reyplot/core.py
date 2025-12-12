@@ -413,7 +413,7 @@ class chart:
                     title = None,
                     dot_shape = "c",
                     color_by = None,
-                    color_range = ("maroon" , "cyan")
+                    color_range = ("cyan" , "maroon")
                     ):
         
             
