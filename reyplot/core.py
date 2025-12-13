@@ -498,7 +498,7 @@ class chart:
         ## Color_by codes
         if isinstance(color_by,str) or isinstance(size_by,str):
             self.simple_scatter = False
-
+            self._OUTER_LAYER_POSTION_.update_x2(3.2)
         layer = ScatterPlot(data=data,
                             x=x,
                             y=y,
