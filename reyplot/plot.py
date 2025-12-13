@@ -41,7 +41,9 @@ class scatter:
                  title = None,
                  dot_shape = "c",
                  color_by = None,
-                 color_range = ("cyan", "maroon")
+                 color_range = ("cyan", "maroon"),
+                 size_by = None,
+                 size_range = (1,2)
 
                  ):
         global _CHART_PLOT_
@@ -59,7 +61,9 @@ class scatter:
                              title = title,
                              dot_shape = dot_shape,
                              color_by = color_by,
-                             color_range = color_range
+                             color_range = color_range,
+                             size_by = size_by,
+                             size_range = size_range
                              )
 
 

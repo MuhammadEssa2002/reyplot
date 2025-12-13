@@ -161,7 +161,9 @@ class ScatterPlot:
                  dot_shape,
                  color_by,
                  color_range,
-                 simpe_scatter
+                 simpe_scatter,
+                 size_by,
+                 size_range
                  ):
         
         self.glow = glow
@@ -179,8 +181,22 @@ class ScatterPlot:
         self.postions = None
         self.limits = None
         self.dot_shape  = dot_shape
+
+
         if not(color_by == None):
             self.color_by_data = self.data[color_by]
+            self.color_by = True
+        else:
+            self.color_by = False
+        
+
+        if not(size_by == None):
+            self.size_by_data = self.data[size_by]
+            self.size_by = True
+        else:
+            self.size_by = False
+
+
         self.color_range_min = __hex_to_rgb_rey__(color_range[0])
         self.color_range_max = __hex_to_rgb_rey__(color_range[1])
         self.simple_scatter = simpe_scatter
@@ -413,13 +429,22 @@ class chart:
                     title = None,
                     dot_shape = "c",
                     color_by = None,
-                    color_range = ("cyan" , "maroon")
+                    color_range = ("cyan" , "maroon"),
+                    size_by = None,
+                    size_range = (1,2)
                     ):
         
             
         self.simple_scatter = True
+
+
         self.color_by_scatter = color_by
         self.color_range_scatter = color_range
+        
+
+        self.size_by_scatter = size_by
+        self.size_range_scatter = size_range
+
 
         # Checking the x_y data
         if (not(isinstance(data,pl.DataFrame)) and not(isinstance(x,str)) and not(isinstance(y,str))):
@@ -469,7 +494,7 @@ class chart:
 
 
         ## Color_by codes
-        if isinstance(color_by,str):
+        if isinstance(color_by,str) or isinstance(size_by,str):
             self.simple_scatter = False
 
         layer = ScatterPlot(data=data,
@@ -486,7 +511,9 @@ class chart:
                             dot_shape = dot_shape,
                             color_by = self.color_by_scatter,
                             color_range = self.color_range_scatter,
-                            simpe_scatter = self.simple_scatter
+                            simpe_scatter = self.simple_scatter,
+                            size_by = self.size_by_scatter,
+                            size_range = self.size_range_scatter
                             )
         self.layers.append(layer)
 
