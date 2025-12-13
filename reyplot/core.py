@@ -195,7 +195,9 @@ class ScatterPlot:
             self.size_by = True
         else:
             self.size_by = False
-
+        
+        self.size_range_min = size_range[0]
+        self.size_range_max = size_range[1]
 
         self.color_range_min = __hex_to_rgb_rey__(color_range[0])
         self.color_range_max = __hex_to_rgb_rey__(color_range[1])

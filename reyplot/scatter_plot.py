@@ -143,7 +143,8 @@ class Draw_scatter_num_num:
         from .pixel_mapper import map_polars_to_pixels
         from .canvas import calculate_dynamic_radius
         from .canvas import single_scatter_num_num
-        from .color_mapper import map_color 
+        from .color_mapper import map_color
+        from .size_mapper import map_size
 
         self.properties = properties
         self._ctx_ = context
@@ -170,7 +171,9 @@ class Draw_scatter_num_num:
         
         
         dot_radius = calculate_dynamic_radius(self.width,self.height,len(self.x_pixels),self.properties.dot_size)
+        
 
+        # Mapping the Color 
         if (self.properties.color_by):
             self.min_color_data = self.properties.color_by_data.min()
             self.max_color_data = self.properties.color_by_data.max()
@@ -189,14 +192,35 @@ class Draw_scatter_num_num:
 
 
 
+        # Mapping the size_mapper
+        if (self.properties.size_by):
+            self.min_size_data = self.properties.size_by_data.min()
+            self.max_size_data = self.properties.size_by_data.max()
+            
+            dot_radius_min = calculate_dynamic_radius(self.width,self.height,len(self.x_pixels),self.properties.size_range_min)
+            dot_radius_max = calculate_dynamic_radius(self.width,self.height,len(self.x_pixels),self.properties.size_range_max)
+        
+ 
 
-        for x , y , r , g , b in zip (self.x_pixels,self.y_pixels, red, green, blue):
+
+            size = map_size(value = self.properties.size_by_data,
+                            data_min = self.min_size_data,
+                            data_max = self.max_size_data,
+                            size_min = dot_radius_min,
+                            size_max = dot_radius_max
+                            )
+        else:
+            size = pl.Series([dot_radius] * len(self.x_pixels))
+
+
+
+        for x , y , r , g , b, s in zip (self.x_pixels,self.y_pixels, red, green, blue, size):
 
 
             single_scatter_num_num(self._ctx_,
                                    x,
                                    y,
-                                   dot_radius,
+                                   s,
                                    "c",
                                    self.width,
                                    self.height,
