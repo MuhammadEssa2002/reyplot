@@ -177,3 +177,56 @@ class Legend_Layout:
 
     def __len__(self):
         return len(self.LEGEND["title"])
+
+
+
+
+# Auto Legend layout
+
+class Auto_Legend_Layout:
+    def __init__(self):
+        self.active_auto_legend = False
+        self.active_auto_legend_color = False
+        self.active_auto_lenged_size = False
+        self.AUTO_LEGEND = {"min_color_data":None,
+                            "max_color_data":None,
+                            "min_color":None,
+                            "max_color":None,
+                            "color_type":None,
+                            "min_size_data":None,
+                            "max_size_data":None,
+                            "min_size":None,
+                            "max_size":None,
+                            "size_type":None
+
+                }
+    def add_color(self, min_color_data, max_color_data, min_color, max_color, color_type):
+        if not(self.active_auto_legend_color):
+            self.AUTO_LEGEND["min_color_data"] = min_color_data
+            self.AUTO_LEGEND["max_color_data"] = max_color_data
+            self.AUTO_LEGEND["min_color"] = min_color
+            self.AUTO_LEGEND["max_color"] = max_color
+            self.AUTO_LEGEND["color_type"] = color_type
+
+            self.active_auto_legend_color = True
+            self.active_auto_legend = True
+
+    def add_size(self, min_size_data, max_size_data, min_size, max_size, size_type):
+        if not(self.active_auto_lenged_size):
+            self.AUTO_LEGEND["min_size_data"] = min_size_data
+            self.AUTO_LEGEND["max_size_data"] = max_size_data
+            self.AUTO_LEGEND["min_size"] = min_size
+            self.AUTO_LEGEND["max_size"] = max_size
+            self.AUTO_LEGEND["size_type"] = size_type
+
+            self.active_auto_lenged_size = True
+
+    def is_active(self):
+        return self.active_auto_legend
+
+    def is_color(self):
+        return self.active_auto_legend_color
+    
+    def is_size(self):
+        return self.active_auto_lenged_size
+

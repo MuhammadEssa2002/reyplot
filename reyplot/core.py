@@ -290,6 +290,10 @@ class chart:
         self.legend_flag = False
         self.legend(display=False)
 
+        # Creating the Auto Legend layout
+        from .layout import Auto_Legend_Layout
+        self.auto_legend = Auto_Legend_Layout()
+
         self.layers = []
         self._OUTER_LAYER_FLAG_ = False
         self._MATUAL_ACTIVE_OUTER_LAYER_ = False
@@ -495,10 +499,26 @@ class chart:
 
 
 
-        ## Color_by codes
+        ## Color_by and size_by codes
         if isinstance(color_by,str) or isinstance(size_by,str):
+
+            if isinstance(color_by,str):
+                self.auto_legend.add_color(min_color_data = data[color_by].min(),
+                                           max_color_data = data[color_by].max(),
+                                           min_color = color_range[0],
+                                           max_color = color_range[1],
+                                           color_type = "scatter_num"
+                        )
+
+
             self.simple_scatter = False
             self._OUTER_LAYER_POSTION_.update_x2(3.2)
+
+
+
+
+
+
         layer = ScatterPlot(data=data,
                             x=x,
                             y=y,
