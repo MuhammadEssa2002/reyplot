@@ -208,6 +208,7 @@ class Auto_Legend_Layout:
             self.AUTO_LEGEND["max_color"] = max_color
             self.AUTO_LEGEND["color_type"] = color_type
 
+
             self.active_auto_legend_color = True
             self.active_auto_legend = True
 
@@ -218,8 +219,10 @@ class Auto_Legend_Layout:
             self.AUTO_LEGEND["min_size"] = min_size
             self.AUTO_LEGEND["max_size"] = max_size
             self.AUTO_LEGEND["size_type"] = size_type
+            
 
             self.active_auto_lenged_size = True
+            self.active_auto_legend = True
 
     def is_active(self):
         return self.active_auto_legend

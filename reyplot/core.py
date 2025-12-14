@@ -143,7 +143,15 @@ class Legend_layer:
             Draw_Legend(self,ctx,width,height)
 
 
+class Auto_Legend_layer:
+    def __init__(self,auto_legend_layout,positions,limits):
+        self.auto_legend = auto_legend_layout
+        self.positions = positions
+        self.limits = limits
 
+    def draw(self,ctx,width,height):
+        if (self.auto_legend.is_active()):
+            print(self.auto_legend.AUTO_LEGEND)
 
 class ScatterPlot:
     def __init__(self
@@ -293,6 +301,7 @@ class chart:
         # Creating the Auto Legend layout
         from .layout import Auto_Legend_Layout
         self.auto_legend = Auto_Legend_Layout()
+        self.auto_legend_flag = True
 
         self.layers = []
         self._OUTER_LAYER_FLAG_ = False
@@ -508,7 +517,15 @@ class chart:
                                            min_color = color_range[0],
                                            max_color = color_range[1],
                                            color_type = "scatter_num"
-                        )
+                                           )
+
+            if isinstance(size_by, str):
+                self.auto_legend.add_size(min_size_data = data[size_by].min(),
+                                          max_size_data = data[size_by].max(),
+                                          min_size = size_range[0],
+                                          max_size = size_range[1],
+                                          size_type = "scatter_num"
+                                          )
 
 
             self.simple_scatter = False
@@ -628,6 +645,18 @@ class chart:
         self.block_grid_layer.y_tic = self.y_tic
 
 
+        
+
+
+
+        #Creating the auto_legend layer
+        if (self.auto_legend_flag):
+            layer = Auto_Legend_layer(auto_legend_layout = self.auto_legend,
+                                      positions = self._OUTER_LAYER_POSTION_.postion(),
+                                      limits = self._OUTER_LAYER_POSTION_.limits()
+                                      )
+            self.layers.append(layer)
+            self.auto_legend_flag = False
 
         #Updating the scatter_plot
         for layer in self.layers:
