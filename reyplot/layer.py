@@ -160,13 +160,13 @@ class Draw_Legend:
              self.block_y_pos = self.properties.positions[3] - (self.properties.positions[3] - self.properties.positions[2])/2 - len(self.properties.legend_layout)*(self.block_height + self.block_height/4)/2
 
 
-        from .canvas import roundrect_stroke
+        from .canvas import roundrect_stroke_legend
 
         for i in range(len(self.properties.legend_layout)):
             self.stroke_color = (*__hex_to_rgb_rey__(self.properties.legend_layout.LEGEND["color"][i]), 0.5)
             self.title = self.properties.legend_layout.LEGEND["title"][i]
             
-            roundrect_stroke(
+            roundrect_stroke_legend(
                       self.ctx,
                       self.block_x_pos,
                       self.block_y_pos,
@@ -185,3 +185,49 @@ class Draw_Legend:
                       dot_shape = self.properties.legend_layout.LEGEND["type"][i] 
                       )
             self.block_y_pos=self.block_y_pos + self.block_height + self.block_height/4
+
+
+
+
+
+class Draw_Auto_Legend:
+    def __init__(self,properties,context,width,height):
+        self.properties = properties
+        self.ctx = context
+        self.width = width
+        self.height = height
+        self.num_legend = 3
+
+
+        self.block_width_gap = (self.width - self.properties.positions[1])/5
+        self.block_width = (self.width - self.properties.positions[1]) - self.block_width_gap
+        self.x_position = self.properties.positions[1] + self.block_width_gap/2
+        
+        
+        self.block_height_gap = ((self.properties.positions[2] - self.properties.positions[3])/3)/8
+        self.block_height = ((self.properties.positions[2] - self.properties.positions[3])/3) - self.block_height_gap
+        self.section_height = (self.properties.positions[2] - self.properties.positions[3])/3
+
+        if (self.num_legend == 1):
+            self.y_position = [self.properties.positions[3] + self.section_height]
+        elif ( self.num_legend == 2):
+            self.y_position = [self.properties.positions[3] + self.section_height/2,
+                              (self.properties.positions[3] + self.section_height/2) + self.section_height
+                               ]
+        else:
+            self.y_position = [self.properties.positions[3],
+                               self.properties.positions[3] + self.section_height,
+                               self.properties.positions[3] + 2 * self.section_height
+                               ]
+
+
+
+        from .canvas import roundrect_stroke_auto_legend
+        for y_height in (self.y_position):
+            roundrect_stroke_auto_legend(ctx = self.ctx,
+                                         x = self.x_position,
+                                         y = y_height,
+                                         width = self.block_width,
+                                         height = self.block_height,
+                                         r = 10 
+                                         )

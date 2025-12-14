@@ -9,7 +9,9 @@ rlt.chart(size = [1000,800])
 rlt.scatter(data = df,
             x = "petal_width",
             y = "petal_length",
-            color_by = "sepal_length"
+            color_by = "sepal_length",
+            title = "Essa"
            )
 rlt.title("Iris Data")
+rlt.legend()
 rlt.show()

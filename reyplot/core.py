@@ -143,6 +143,13 @@ class Legend_layer:
             Draw_Legend(self,ctx,width,height)
 
 
+
+
+
+
+
+
+
 class Auto_Legend_layer:
     def __init__(self,auto_legend_layout,positions,limits):
         self.auto_legend = auto_legend_layout
@@ -151,7 +158,15 @@ class Auto_Legend_layer:
 
     def draw(self,ctx,width,height):
         if (self.auto_legend.is_active()):
-            pass
+            from .layer import Draw_Auto_Legend
+            Draw_Auto_Legend(self,ctx,width,height)
+
+
+
+
+
+
+
 class ScatterPlot:
     def __init__(self
                  ,data,
