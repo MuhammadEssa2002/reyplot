@@ -34,7 +34,7 @@ def draw_ticks(_ctx_,snap,position,limits,line_width,width,height,color,alpha,x_
     ticks = calculate_ticks(position=position, limits=limits, x_tic=x_tic, y_tic=y_tic)
     len_tick_height = height * 0.01
     len_tick_width = width * 0.008
-    font_size = math.sqrt(width**2 + height**2)/80
+    font_size = math.sqrt(width**2 + height**2)/120
     formater = AutoNumberFormatter(sig_digits=sig_digits)
 
     for i in range(len(ticks[0])):

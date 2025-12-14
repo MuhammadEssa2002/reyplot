@@ -38,7 +38,7 @@ class X_Y_titles:
 
 class Draw_X_Y_titles: # Fixed typo 'tiles' -> 'titles'
     def __init__(self, properties, context, width, height):
-        self.font_size = math.sqrt(width**2 + height**2) / 50
+        self.font_size = math.sqrt(width**2 + height**2) / 60
         self.ctx = context # Fixed typo 'contex'
 
         if (properties.x_title == "#__GIVEN_X_SERISE__#"):

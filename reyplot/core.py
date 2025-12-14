@@ -151,8 +151,7 @@ class Auto_Legend_layer:
 
     def draw(self,ctx,width,height):
         if (self.auto_legend.is_active()):
-            print(self.auto_legend.AUTO_LEGEND)
-
+            pass
 class ScatterPlot:
     def __init__(self
                  ,data,
