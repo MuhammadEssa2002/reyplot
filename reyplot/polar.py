@@ -1,4 +1,5 @@
 import polars as pl
+import math
 
 def ls(start,stop,num_samples):
     df = pl.DataFrame().with_columns(
@@ -10,3 +11,32 @@ def ls(start,stop,num_samples):
     )
 
     return df.get_column("linspace")
+
+
+
+def wilkinson_ticks_polars(vmin, vmax, nticks=5, name="ticks"):
+    if vmin == vmax:
+        return pl.Series(name, [vmin])
+
+    span = vmax - vmin
+    raw_step = span / (nticks - 1)
+
+    power = 10 ** math.floor(math.log10(abs(raw_step)))
+    candidates = [1, 2, 2.5, 5, 10]
+
+    best_step = min(
+        (q * power for q in candidates),
+        key=lambda s: abs(s - raw_step)
+    )
+
+    start = math.floor(vmin / best_step) * best_step
+    end   = math.ceil(vmax / best_step) * best_step
+
+    ticks = []
+    t = start
+    eps = 1e-10
+    while t <= end + eps:
+        ticks.append(round(t, 10))
+        t += best_step
+
+    return pl.Series(name, ticks)

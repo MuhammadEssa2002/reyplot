@@ -1,13 +1,14 @@
 import cairo
 import math
 from .polar import ls
+from .polar import wilkinson_ticks_polars
 from .pixel_mapper import map_polars_to_pixels
 
 
 
 ## For calculating the tics postions and values
 def calculate_ticks(position,limits,x_tic,y_tic):
-    x_ticks_values = ls(limits[0],limits[1],x_tic)
+    x_ticks_values = wilkinson_ticks_polars(limits[0],limits[1],x_tic)
     x_ticks = map_polars_to_pixels(
             x_ticks_values,
             limits[0],
@@ -15,7 +16,7 @@ def calculate_ticks(position,limits,x_tic,y_tic):
             position[0],
             position[1]
         )
-    y_ticks_values = ls(limits[2],limits[3],y_tic)
+    y_ticks_values = wilkinson_ticks_polars(limits[2],limits[3],y_tic)
     y_ticks = map_polars_to_pixels(
             y_ticks_values,
             limits[2],
@@ -38,6 +39,8 @@ def draw_ticks(_ctx_,snap,position,limits,line_width,width,height,color,alpha,x_
     formater = AutoNumberFormatter(sig_digits=sig_digits)
 
     for i in range(len(ticks[0])):
+        if (ticks[2][i] > limits[1]) or (ticks[2][i] < limits[0]):
+            continue
         _ctx_.set_line_width(line_width)
         _ctx_.set_source_rgba(color[0], color[1], color[2],alpha)
         _ctx_.move_to(snap(ticks[0][i]),
@@ -50,7 +53,7 @@ def draw_ticks(_ctx_,snap,position,limits,line_width,width,height,color,alpha,x_
         _ctx_.stroke()
 
         # Ticks values 
-        _ctx_.select_font_face("Sans", cairo.FONT_SLANT_NORMAL)
+        _ctx_.select_font_face("Sans", cairo.FONT_SLANT_NORMAL,cairo.FONT_WEIGHT_BOLD)
         _ctx_.set_font_size(font_size)
         _ctx_.set_source_rgba(color[0], color[1], color[2],alpha)
         extents = _ctx_.text_extents(formater(ticks[2][i]))
@@ -65,6 +68,8 @@ def draw_ticks(_ctx_,snap,position,limits,line_width,width,height,color,alpha,x_
     
 
     for i in range(len(ticks[1])):
+        if (ticks[3][i] > limits[3]) or (ticks[3][i] < limits[2]):
+            continue
         _ctx_.set_line_width(line_width)
         _ctx_.set_source_rgba(color[0], color[1], color[2],alpha)
 
@@ -80,7 +85,7 @@ def draw_ticks(_ctx_,snap,position,limits,line_width,width,height,color,alpha,x_
         _ctx_.stroke()
 
         # Ticks values 
-        _ctx_.select_font_face("Sans", cairo.FONT_SLANT_NORMAL)
+        _ctx_.select_font_face("Sans", cairo.FONT_SLANT_NORMAL ,cairo.FONT_WEIGHT_BOLD)
         _ctx_.set_font_size(font_size)
         _ctx_.set_source_rgba(color[0], color[1], color[2],alpha)
         extents = _ctx_.text_extents(formater(ticks[3][i]))

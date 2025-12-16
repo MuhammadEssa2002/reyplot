@@ -196,7 +196,9 @@ class Draw_Auto_Legend:
         self.ctx = context
         self.width = width
         self.height = height
-        self.num_legend = 3
+        self.min_color = __hex_to_rgb_rey__(self.properties.auto_legend.AUTO_LEGEND["min_color"])
+        self.max_color = __hex_to_rgb_rey__(self.properties.auto_legend.AUTO_LEGEND["max_color"])
+        self.num_legend = self.properties.auto_legend.num_legend
 
 
         self.block_width_gap = (self.width - self.properties.positions[1])/5
@@ -229,5 +231,7 @@ class Draw_Auto_Legend:
                                          y = y_height,
                                          width = self.block_width,
                                          height = self.block_height,
-                                         r = 10 
+                                         r = 10,
+                                         min_color = self.min_color,
+                                         max_color = self.max_color
                                          )

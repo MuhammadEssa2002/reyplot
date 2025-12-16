@@ -188,6 +188,7 @@ class Auto_Legend_Layout:
         self.active_auto_legend = False
         self.active_auto_legend_color = False
         self.active_auto_lenged_size = False
+        self.num_legend = 0
         self.AUTO_LEGEND = {"min_color_data":None,
                             "max_color_data":None,
                             "min_color":None,
@@ -208,6 +209,8 @@ class Auto_Legend_Layout:
             self.AUTO_LEGEND["max_color"] = max_color
             self.AUTO_LEGEND["color_type"] = color_type
 
+            self.num_legend = self.num_legend + 1 
+
 
             self.active_auto_legend_color = True
             self.active_auto_legend = True
@@ -220,6 +223,8 @@ class Auto_Legend_Layout:
             self.AUTO_LEGEND["max_size"] = max_size
             self.AUTO_LEGEND["size_type"] = size_type
             
+            
+            self.num_legend = self.num_legend + 1
 
             self.active_auto_lenged_size = True
             self.active_auto_legend = True

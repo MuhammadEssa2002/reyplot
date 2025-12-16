@@ -42,7 +42,12 @@ def mixed_corner_rectangle(ctx, x, y, width, height, r):
 
     # Clamp radius to safe value
     r = min(r, width / 2, height / 2)
-
+    
+    ctx.rectangle(x + (width/2)/2,
+                  y + height/9,
+                  width - width/2,
+                  height/50
+                  ) 
     # Start at top-left (sharp)
     ctx.move_to(x, y)
 
@@ -73,15 +78,28 @@ def mixed_corner_rectangle(ctx, x, y, width, height, r):
     ctx.line_to(x, y)
 
     ctx.close_path()
-
-
-
-
-def roundrect_stroke_auto_legend(ctx,x,y,width,height,r):
     
-    ctx.set_source_rgb(0.2, 0.6, 0.9)
+
+    ctx.set_fill_rule(cairo.FillRule.EVEN_ODD)
+
+
+
+
+def roundrect_stroke_auto_legend(ctx,x,y,width,height,r,min_color,max_color):
+    
+    ctx.set_source_rgb(0.5, 0.5, 0.5)
     mixed_corner_rectangle(ctx, x , y, width, height,r)
     ctx.fill()
+    
+    draw_gradient_rectangle(ctx = ctx,
+                            x = x,
+                            y = y + height/5,
+                            width = width/4,
+                            height = height/1.5,
+                            color_min = min_color,
+                            color_max = max_color
+                            )
+
 
 
 
@@ -196,6 +214,28 @@ def roundrect_stroke_legend(ctx, x, y, width, height, r,canva_width,canva_height
 
     
 
+# Rectangle with gradient used for the color bar 
+def draw_gradient_rectangle(ctx, x, y, width, height, color_min, color_max):
+    """
+    color_min, color_max: tuples like (r, g, b) or (r, g, b, a)
+    """
+
+    # Create vertical linear gradient
+    gradient = cairo.LinearGradient(
+        x, y,               # top
+        x, y + height       # bottom
+    )
+
+    # Top color
+    gradient.add_color_stop_rgb(0.0, *color_max)
+
+    # Bottom color
+    gradient.add_color_stop_rgb(1.0, *color_min)
+
+    # Draw rectangle
+    ctx.rectangle(x, y, width, height)
+    ctx.set_source(gradient)
+    ctx.fill()
 
 # ------------------------- CIRCLE ------------------------- #
 def draw_circle(ctx, x, y, r, color, alpha, glow_gradient):
