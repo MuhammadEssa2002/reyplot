@@ -10,7 +10,7 @@ rlt.scatter(data = df,
             x = "petal_width",
             y = "petal_length",
             title = "petal_width vs petal_length",
-            color_by = "sepal_length",
+            color_by = "petal_length"
            )
 rlt.legend()
 rlt.title("Iris Data", font = "Bruno Ace")

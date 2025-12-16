@@ -92,12 +92,13 @@ def roundrect_stroke_auto_legend(ctx,x,y,width,height,r,min_color,max_color):
     ctx.fill()
     
     draw_gradient_rectangle(ctx = ctx,
-                            x = x,
+                            x = x + width/15,
                             y = y + height/5,
                             width = width/4,
-                            height = height/1.5,
+                            height = height/1.4,
                             color_min = min_color,
-                            color_max = max_color
+                            color_max = max_color,
+                            r = r
                             )
 
 
@@ -215,7 +216,7 @@ def roundrect_stroke_legend(ctx, x, y, width, height, r,canva_width,canva_height
     
 
 # Rectangle with gradient used for the color bar 
-def draw_gradient_rectangle(ctx, x, y, width, height, color_min, color_max):
+def draw_gradient_rectangle(ctx, x, y, width, height, color_min, color_max,r):
     """
     color_min, color_max: tuples like (r, g, b) or (r, g, b, a)
     """
@@ -233,7 +234,29 @@ def draw_gradient_rectangle(ctx, x, y, width, height, color_min, color_max):
     gradient.add_color_stop_rgb(1.0, *color_min)
 
     # Draw rectangle
-    ctx.rectangle(x, y, width, height)
+    #ctx.rectangle(x, y, width, height)
+    ctx.move_to(x, y)
+
+    # Top edge → to top-right (before curve)
+    ctx.line_to(x + width , y)
+
+    # Right edge → bottom-right (sharp)
+    ctx.line_to(x + width, y + height)
+
+    # Bottom edge → to bottom-left (before curve)
+    ctx.line_to(x + r, y + height)
+
+    # Bottom-left corner (rounded)
+    ctx.arc(
+        x + r, y + height - r,
+        r,
+        math.pi / 2, math.pi
+    )
+
+    # Left edge → back to top-left
+    ctx.line_to(x, y)
+
+    ctx.close_path()
     ctx.set_source(gradient)
     ctx.fill()
 
