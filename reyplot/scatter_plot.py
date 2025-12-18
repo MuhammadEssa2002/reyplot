@@ -221,7 +221,7 @@ class Draw_scatter_num_num:
                                    x,
                                    y,
                                    s,
-                                   "c",
+                                   "c2",
                                    self.width,
                                    self.height,
                                    False,

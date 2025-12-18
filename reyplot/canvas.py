@@ -87,9 +87,11 @@ def mixed_corner_rectangle(ctx, x, y, width, height, r):
 
 def roundrect_stroke_auto_legend(ctx,x,y,width,height,r,min_color,max_color):
     
-    ctx.set_source_rgb(0.5, 0.5, 0.5)
-    mixed_corner_rectangle(ctx, x , y, width, height,r)
-    ctx.fill()
+    # ctx.set_source_rgb(0.5, 0.5, 0.5)
+    # mixed_corner_rectangle(ctx, x , y, width, height,r)
+    # ctx.fill()
+    color = (0,1,1)
+    scifi_block(ctx,x - width/10,y,width+0.5*width,height+0.3*height,color)
     
     draw_gradient_rectangle(ctx = ctx,
                             x = x + width/15,
@@ -260,6 +262,85 @@ def draw_gradient_rectangle(ctx, x, y, width, height, color_min, color_max,r):
     ctx.set_source(gradient)
     ctx.fill()
 
+
+#---------------------------Sci-Fi-------------------------#
+def scifi_block(cr,x,y,width,height,color):
+
+    line_width = math.sqrt(width**2 + height**2)/100
+
+    cr.set_line_width(line_width)
+
+    cr.set_source_rgba(*color,0.2)
+
+
+    # First line
+    cr.new_path()
+    cr.move_to(x + width/10,y) # 0
+    cr.line_to( x+width/2.3,y) # 1
+    cr.line_to(x+width/2.3 + width/20, y + height/15) # 2
+    cr.line_to(x+width/2.3 + width/8, y + height/15) # 3
+    cr.line_to(x+width/2.3 + width/8 + width/20, y) # 4
+    cr.line_to(x+width/2.3 + width/8 + width/8, y) # 5
+    cr.line_to(x + width - 2*width/9 - line_width/2 , y+height/12) # 6
+    cr.line_to(x + width - 2*width/9 - line_width/2 , y+height/2.5) # 7
+    cr.line_to(x + width - 2*width/6 - line_width/2 , y+height/2.2) # 8
+    cr.line_to(x + width - 2*width/6 - line_width/2 ,y + height - 2*height/7 -  line_width/2) # 9
+    cr.line_to(x + width - 2*width/5 - line_width/2 ,y + height - 2*height/9 -  line_width/2) # 10
+    cr.line_to(x + width - 2*width/3.5 - line_width/2 ,y + height - 2*height/9 -  line_width/2) # 11
+    cr.line_to( x + width - 2*width/3.2 - line_width/2 ,y + height - 2*height/12 -  line_width/2) # 12
+    cr.line_to(x + width - 2*width/2.6 - line_width/2 ,y + height - 2*height/12 -  line_width/2) # 13
+    cr.line_to(x + width - 2*width/2.4 - line_width/2 ,y + height - 2*height/9 -  line_width/2) # 14
+    cr.line_to(x + width - 2*width/2.2 - line_width/2 ,y + height - 2*height/9 -  line_width/2) # 15
+    cr.line_to(x + line_width/2 ,y + height - 2*height/7  - line_width/2) # 16
+    cr.line_to(x + line_width/2 ,y + height - 2*height/5  - line_width/2) # 17
+    cr.line_to(x + line_width/2 + width/12 ,y + height - 2*height/4.3  - line_width/2) # 18
+    cr.line_to(x + line_width/2 + width/12 ,y + height - 2*height/3  - line_width/2) # 19
+    cr.line_to(x + line_width/2 ,y + height - 2*height/2.7  - line_width/2) # 20
+    cr.line_to(x + line_width/2 ,y + height - 2*height/2.2  - line_width/2) # 21
+    cr.close_path()
+    cr.fill_preserve()
+    cr.set_source_rgba(*color,1)
+    cr.stroke()
+
+    cr.set_line_width(2*line_width)
+
+    cr.set_source_rgba(*color,1)
+    cr.move_to(x + width - 2*width/7 - line_width/2 , y+height/2)
+    cr.line_to(x + width - 2*width/9 - line_width/2 , y+height/2.1)
+
+    cr.move_to(x + width - 2*width/7 - line_width/2 , y+height/1.8)
+    cr.line_to(x + width - 2*width/9 - line_width/2 , y+height/1.9)
+
+    cr.move_to(x + width - 2*width/7 - line_width/2 , y+height/1.65)
+    cr.line_to(x + width - 2*width/9 - line_width/2 , y+height/1.7)
+
+    cr.move_to(x + width - 2*width/7 - line_width/2 , y+height/1.5)
+    cr.line_to(x + width - 2*width/9 - line_width/2 , y+height/1.55)
+    cr.stroke()
+
+    cr.arc(x + width - 2*width/3.1 - line_width/2 ,y + height - 2*height/10 -  line_width/2, line_width/2, 0, 2*math.pi)
+    cr.arc(x + width - 2*width/2.9 - line_width/2 ,y + height - 2*height/10 -  line_width/2, line_width/2, 0, 2*math.pi)
+    cr.arc(x + width - 2*width/2.7 - line_width/2 ,y + height - 2*height/10 -  line_width/2, line_width/2, 0, 2*math.pi)
+    cr.set_source_rgba(*color,1)
+    cr.fill()
+
+
+    cr.set_line_width(line_width/2)
+    cr.move_to(x+width/2.2 + width/8, y + height/8)
+    cr.line_to(x+width/2.3 + width/8 + width/20, y+ height/15)
+    cr.line_to(x+width/2.3 + width/8 + width/8, y+ height/15)
+    cr.line_to(x + width - 2*width/7.5 - line_width/2 , y+height/8)
+    cr.line_to(x + width - 2*width/7.5 - line_width/2 , y+height/2.8)
+    cr.line_to(x + width - 2*width/5.3 - line_width/2 , y+height/2.4)
+    cr.set_source_rgba(*color,0.7)
+    cr.stroke()
+
+
+    cr.arc(x+width/2.2 + width/8, y + height/8, line_width/1.5,0, 2*math.pi)
+    cr.arc(x + width - 2*width/5.3 - line_width/2 , y+height/2.4, line_width/1.5, 0, 2*math.pi)
+    cr.set_source_rgba(*color,0.7)
+    cr.fill()
+
 # ------------------------- CIRCLE ------------------------- #
 def draw_circle(ctx, x, y, r, color, alpha, glow_gradient):
     ctx.new_path()
@@ -269,6 +350,63 @@ def draw_circle(ctx, x, y, r, color, alpha, glow_gradient):
 
     ctx.fill_preserve()
 
+#-------------------------CIRCLE-1--------------------------#
+def draw_circle_1(cr,x,y,r,color,alpha,glow_gradient):
+    if (glow_gradient):
+        color = (1,1,1)
+    radius = r
+    cr.set_line_width(radius/5)
+
+    cr.set_source_rgba(*color,alpha)
+    cr.arc(x  , y  , 1.1 * radius, 0, 2*math.pi)
+    cr.stroke()
+
+    cr.set_source_rgba(*color,alpha)
+    cr.arc(x , y , radius/1.2, 0, 2*math.pi)
+    cr.fill()
+
+#-------------------------CIRCLE-2--------------------------#
+def draw_circle_2(cr,x,y,r,color,alpha,glow_gradient):
+    if (glow_gradient):
+        color = (1,1,1)
+    radius = r
+    cr.set_line_width(radius/5)
+
+    cr.set_source_rgba(1,1,1,alpha)
+    cr.arc(x  , y  , 1.1 * radius, 0, 2*math.pi)
+    cr.stroke()
+
+    cr.set_source_rgba(*color,alpha)
+    cr.arc(x , y , radius/1.2, 0, 2*math.pi)
+    cr.fill()
+
+# ------------------------CIRCLE-3--------------------------#
+def draw_circle_3(cr,x,y,r,color,alpha,glow_gradient):
+    if (glow_gradient):
+        color = (1,1,1)
+    radius = r
+    cr.set_line_width(radius/5)
+
+    cr.set_source_rgba(*color,alpha)
+    cr.arc(x , y , 1.1 * radius, 0, math.pi/2)
+    cr.stroke()
+
+
+    cr.set_source_rgba(*color,alpha)
+    cr.arc(x , y , radius/2, math.pi, 2*math.pi)
+    cr.stroke()
+
+    cr.set_source_rgba(*color,alpha)
+    cr.arc(x , y  , 1.1 *radius, math.pi/1.2, 2*math.pi/1.2)
+    cr.stroke()
+
+    cr.set_source_rgba(*color,alpha)
+    cr.arc(x , y , radius/1.2,  math.pi/4, math.pi + math.pi/2)
+    cr.stroke()
+
+    cr.set_source_rgba(*color,alpha)
+    cr.arc(x  , y , radius/3, 0, 2*math.pi)
+    cr.fill()
 
 
 # ------------------------- DIAMOND ------------------------- #
@@ -470,6 +608,12 @@ def single_scatter_num_num(ctx,
 
     if (dot_shape == "c"):
         draw_circle(ctx, x, y, dot_radius, color, alpha, glow_gradient)
+    if (dot_shape == "c1"):
+        draw_circle_1(ctx,x,y,dot_radius,color,alpha,glow_gradient)
+    if (dot_shape == "c2"):
+        draw_circle_2(ctx,x,y,dot_radius,color,alpha,glow_gradient)
+    if (dot_shape == "c3"):
+        draw_circle_3(ctx,x,y,dot_radius,color,alpha,glow_gradient)
     if (dot_shape == "h"):
         draw_hexagon(ctx, x, y, dot_radius, color, alpha, glow_gradient)
     if (dot_shape == "s"):
