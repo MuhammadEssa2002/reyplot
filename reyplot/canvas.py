@@ -95,13 +95,23 @@ def roundrect_stroke_auto_legend(ctx,x,y,width,height,r,min_color,max_color):
     
     draw_gradient_rectangle(ctx = ctx,
                             x = x + width/15,
-                            y = y + height/5,
+                            y = y + height/4,
                             width = width/4,
                             height = height/1.4,
                             color_min = min_color,
                             color_max = max_color,
                             r = r
                             )
+    
+    TEXT(ctx,"petal_length",
+         x - width/15,
+         y + height/5,
+         width,
+         height,
+         250,
+         200,
+         "Bruno Ace",
+         (0,1,1))
 
 
 
@@ -246,15 +256,9 @@ def draw_gradient_rectangle(ctx, x, y, width, height, color_min, color_max,r):
     ctx.line_to(x + width, y + height)
 
     # Bottom edge → to bottom-left (before curve)
-    ctx.line_to(x + r, y + height)
+    ctx.line_to(x , y + height)
 
     # Bottom-left corner (rounded)
-    ctx.arc(
-        x + r, y + height - r,
-        r,
-        math.pi / 2, math.pi
-    )
-
     # Left edge → back to top-left
     ctx.line_to(x, y)
 
@@ -340,7 +344,33 @@ def scifi_block(cr,x,y,width,height,color):
     cr.arc(x + width - 2*width/5.3 - line_width/2 , y+height/2.4, line_width/1.5, 0, 2*math.pi)
     cr.set_source_rgba(*color,0.7)
     cr.fill()
+#--------------------------TEXT------------------------------#
+def TEXT(ctx,text,x,y,width,height,x_scale,y_scale,font,color):
+    ctx.save()
 
+    # Move origin to center
+
+    # Proper scale (any number is fine)
+    
+
+    ctx.set_source_rgb(*color)
+    ctx.select_font_face(font, cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
+    ctx.set_font_size(20)
+
+    ext = ctx.text_extents(text)
+
+    # Center text at (0, 0)
+    ctx.move_to(
+    x,
+    y
+    )
+    ctx.translate(width / 2, height / 2)
+    ctx.scale(width/x_scale,
+              height/y_scale)
+
+    ctx.show_text(text)
+
+    ctx.restore()
 # ------------------------- CIRCLE ------------------------- #
 def draw_circle(ctx, x, y, r, color, alpha, glow_gradient):
     ctx.new_path()
