@@ -171,7 +171,7 @@ class Draw_Axes:
 
 
 class AutoNumberFormatter:
-    def __init__(self, sci_min=1e-3, sci_max=1e4, sig_digits=3):
+    def __init__(self, sci_min=1e-3, sci_max=1e3, sig_digits=3):
         self.sci_min = sci_min
         self.sci_max = sci_max
         self.sig_digits = sig_digits
@@ -181,4 +181,5 @@ class AutoNumberFormatter:
             return "0"
         if abs(x) < self.sci_min or abs(x) >= self.sci_max:
             return format(x, f".{self.sig_digits}e")
+            
         return format(x, f".{self.sig_digits}g")

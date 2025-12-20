@@ -1,6 +1,7 @@
 import math
 import cairo
 from PIL import Image, ImageFilter
+from reyplot.pixel_mapper import map_polars_to_pixels
 
 def calculate_dynamic_radius(surface_width, surface_height, num_points,size):
     """
@@ -85,12 +86,12 @@ def mixed_corner_rectangle(ctx, x, y, width, height, r):
 
 
 
-def roundrect_stroke_auto_legend(ctx,x,y,width,height,r,min_color,max_color):
+def roundrect_stroke_auto_legend(ctx,x,y,width,height,r,min_color,max_color,min_color_data,max_color_data):
     
     # ctx.set_source_rgb(0.5, 0.5, 0.5)
     # mixed_corner_rectangle(ctx, x , y, width, height,r)
     # ctx.fill()
-    color = (0,1,1)
+    color = (0,0,0)
     scifi_block(ctx,x - width/10,y,width+0.5*width,height+0.3*height,color)
     
     draw_gradient_rectangle(ctx = ctx,
@@ -100,7 +101,9 @@ def roundrect_stroke_auto_legend(ctx,x,y,width,height,r,min_color,max_color):
                             height = height/1.4,
                             color_min = min_color,
                             color_max = max_color,
-                            r = r
+                            r = r,
+                            min_color_data = min_color_data,
+                            max_color_data = max_color_data
                             )
     
     TEXT(ctx,"petal_length",
@@ -110,8 +113,8 @@ def roundrect_stroke_auto_legend(ctx,x,y,width,height,r,min_color,max_color):
          height,
          250,
          200,
-         "Bruno Ace",
-         (0,1,1))
+         "Sans",
+         (0,0,0))
 
 
 
@@ -228,10 +231,21 @@ def roundrect_stroke_legend(ctx, x, y, width, height, r,canva_width,canva_height
     
 
 # Rectangle with gradient used for the color bar 
-def draw_gradient_rectangle(ctx, x, y, width, height, color_min, color_max,r):
+def draw_gradient_rectangle(ctx, x, y, width, height, color_min, color_max,r,min_color_data,max_color_data):
     """
     color_min, color_max: tuples like (r, g, b) or (r, g, b, a)
     """
+
+
+    from .polar import wilkinson_ticks_polars
+    from .pixel_mapper import map_polars_to_pixels
+    from .axes import AutoNumberFormatter
+    
+    formater = AutoNumberFormatter()
+
+
+    ticks_value = wilkinson_ticks_polars(min_color_data,max_color_data,4)
+    ticks_pixels = map_polars_to_pixels(ticks_value,max_color_data,min_color_data,y,y+height)
 
     # Create vertical linear gradient
     gradient = cairo.LinearGradient(
@@ -265,6 +279,12 @@ def draw_gradient_rectangle(ctx, x, y, width, height, color_min, color_max,r):
     ctx.close_path()
     ctx.set_source(gradient)
     ctx.fill()
+
+    for color_pix, color_value in zip(ticks_pixels,ticks_value):
+        if ((color_value > max_color_data) or (color_value < min_color_data)):
+            continue
+        value = formater(color_value)
+        TEXT(ctx,value,x+width+width/10,color_pix,width,height,80,200,"Sans",(0,0,0),origin="center_left")
 
 
 #---------------------------Sci-Fi-------------------------#
@@ -345,9 +365,13 @@ def scifi_block(cr,x,y,width,height,color):
     cr.set_source_rgba(*color,0.7)
     cr.fill()
 #--------------------------TEXT------------------------------#
-def TEXT(ctx,text,x,y,width,height,x_scale,y_scale,font,color):
+def TEXT(ctx,text,x,y,width,height,x_scale,y_scale,font,color,origin = "bottom_left"):
+    
     ctx.save()
-
+    #ctx.translate(x,y)
+    #ctx.scale(width/x_scale,
+     #        height/y_scale)
+    
     # Move origin to center
 
     # Proper scale (any number is fine)
@@ -356,20 +380,45 @@ def TEXT(ctx,text,x,y,width,height,x_scale,y_scale,font,color):
     ctx.set_source_rgb(*color)
     ctx.select_font_face(font, cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
     ctx.set_font_size(20)
+    
+    ctx.translate(x,y)
+    ctx.scale(width/x_scale,height/y_scale)
 
     ext = ctx.text_extents(text)
 
     # Center text at (0, 0)
-    ctx.move_to(
-    x,
-    y
-    )
-    ctx.translate(width / 2, height / 2)
-    ctx.scale(width/x_scale,
-              height/y_scale)
+    if (origin == "top_left"):
+        ctx.move_to(0,ext.height)
+
+    elif (origin == "center_left"):
+        ctx.move_to(0,ext.height/2)
+
+    elif(origin == "bottom_left"):
+        ctx.move_to(0,0)
+
+    elif(origin == "top_middle"):
+        ctx.move_to(-ext.width/2,ext.height)
+
+    elif(origin == "center_middle"):
+        ctx.move_to(-ext.width/2,ext.height/2)
+
+    elif(origin == "bottom_middle"):
+        ctx.move_to(-ext.width/2,0)
+
+    elif(origin == "top_right"):
+        ctx.move_to(-ext.width,ext.height)
+
+    elif(origin == "center_right"):
+        ctx.move_to(-ext.width,ext.height/2)
+
+    elif(origin == "bottom_right"):
+        ctx.move_to(-ext.width,0)
+
 
     ctx.show_text(text)
 
+    
+    
     ctx.restore()
 # ------------------------- CIRCLE ------------------------- #
 def draw_circle(ctx, x, y, r, color, alpha, glow_gradient):

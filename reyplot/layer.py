@@ -196,8 +196,12 @@ class Draw_Auto_Legend:
         self.ctx = context
         self.width = width
         self.height = height
+
         self.min_color = __hex_to_rgb_rey__(self.properties.auto_legend.AUTO_LEGEND["min_color"])
         self.max_color = __hex_to_rgb_rey__(self.properties.auto_legend.AUTO_LEGEND["max_color"])
+        self.min_color_data = self.properties.auto_legend.AUTO_LEGEND["min_color_data"]
+        self.max_color_data = self.properties.auto_legend.AUTO_LEGEND["max_color_data"]
+
         self.num_legend = self.properties.auto_legend.num_legend
 
 
@@ -233,5 +237,7 @@ class Draw_Auto_Legend:
                                          height = self.block_height,
                                          r = 10,
                                          min_color = self.min_color,
-                                         max_color = self.max_color
+                                         max_color = self.max_color,
+                                         min_color_data = self.min_color_data,
+                                         max_color_data = self.max_color_data
                                          )
