@@ -213,8 +213,12 @@ class Draw_Auto_Legend:
         self.block_height_gap = ((self.properties.positions[2] - self.properties.positions[3])/3)/8
         self.block_height = ((self.properties.positions[2] - self.properties.positions[3])/3) - self.block_height_gap
         self.section_height = (self.properties.positions[2] - self.properties.positions[3])/3
+        
 
-        if (self.num_legend == 1):
+        if(self.num_legend == 1 and self.properties.auto_legend.style == "formal"):
+            self.y_position = [self.properties.positions[3]]
+            self.block_height = (self.properties.positions[2] - self.properties.positions[3])
+        elif (self.num_legend == 1):
             self.y_position = [self.properties.positions[3] + self.section_height]
         elif ( self.num_legend == 2):
             self.y_position = [self.properties.positions[3] + self.section_height/2,
@@ -239,5 +243,6 @@ class Draw_Auto_Legend:
                                          min_color = self.min_color,
                                          max_color = self.max_color,
                                          min_color_data = self.min_color_data,
-                                         max_color_data = self.max_color_data
+                                         max_color_data = self.max_color_data,
+                                         style = self.properties.auto_legend.style
                                          )

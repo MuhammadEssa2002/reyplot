@@ -314,8 +314,9 @@ class chart:
 
         # Creating the Auto Legend layout
         from .layout import Auto_Legend_Layout
-        self.auto_legend = Auto_Legend_Layout()
+        self.auto_legend_layout = Auto_Legend_Layout()
         self.auto_legend_flag = True
+        self.auto_legend()
 
         self.layers = []
         self._OUTER_LAYER_FLAG_ = False
@@ -441,6 +442,11 @@ class chart:
         self.legend_stroke = stroke
         self.legend_stroke_color = stroke_color
         self.legend_shadow = shadow
+    
+    
+    # Auto Legend
+    def auto_legend(self,style = "formal"):
+        self.auto_legend_layout.style = style
 
     # Creating the scatterPlot method where user can define the main data and columns to work on!
     def scatter(self,
@@ -526,7 +532,7 @@ class chart:
         if isinstance(color_by,str) or isinstance(size_by,str):
 
             if isinstance(color_by,str):
-                self.auto_legend.add_color(min_color_data = data[color_by].min(),
+                self.auto_legend_layout.add_color(min_color_data = data[color_by].min(),
                                            max_color_data = data[color_by].max(),
                                            min_color = color_range[0],
                                            max_color = color_range[1],
@@ -534,7 +540,7 @@ class chart:
                                            )
 
             if isinstance(size_by, str):
-                self.auto_legend.add_size(min_size_data = data[size_by].min(),
+                self.auto_legend_layout.add_size(min_size_data = data[size_by].min(),
                                           max_size_data = data[size_by].max(),
                                           min_size = size_range[0],
                                           max_size = size_range[1],
@@ -665,7 +671,7 @@ class chart:
 
         #Creating the auto_legend layer
         if (self.auto_legend_flag):
-            layer = Auto_Legend_layer(auto_legend_layout = self.auto_legend,
+            layer = Auto_Legend_layer(auto_legend_layout = self.auto_legend_layout,
                                       positions = self._OUTER_LAYER_POSTION_.postion(),
                                       limits = self._OUTER_LAYER_POSTION_.limits()
                                       )

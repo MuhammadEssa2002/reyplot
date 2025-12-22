@@ -188,6 +188,7 @@ class Auto_Legend_Layout:
         self.active_auto_legend = False
         self.active_auto_legend_color = False
         self.active_auto_lenged_size = False
+        self.style = None
         self.num_legend = 0
         self.AUTO_LEGEND = {"min_color_data":None,
                             "max_color_data":None,

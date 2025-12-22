@@ -2,12 +2,12 @@ import reyplot.plot as rlt
 
 df = rlt.load_dataset("iris")
 
-rlt.chart(size=[1000,800])
+fig = rlt.chart(size=[1280,720])
 
-rlt.scatter(data = df,
+fig.scatter(data = df,
             x = "sepal_width",
             y = "sepal_length",
-            color_by = "petal_length"
+            color_by = "petal_length",
             )
-
-rlt.show()
+fig.title("Iris Data")
+fig.show()

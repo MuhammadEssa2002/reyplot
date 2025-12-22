@@ -86,35 +86,58 @@ def mixed_corner_rectangle(ctx, x, y, width, height, r):
 
 
 
-def roundrect_stroke_auto_legend(ctx,x,y,width,height,r,min_color,max_color,min_color_data,max_color_data):
+def roundrect_stroke_auto_legend(ctx,x,y,width,height,r,min_color,max_color,min_color_data,max_color_data,style):
     
-    # ctx.set_source_rgb(0.5, 0.5, 0.5)
-    # mixed_corner_rectangle(ctx, x , y, width, height,r)
-    # ctx.fill()
     color = (0,0,0)
-    scifi_block(ctx,x - width/10,y,width+0.5*width,height+0.3*height,color)
-    
-    draw_gradient_rectangle(ctx = ctx,
-                            x = x + width/15,
-                            y = y + height/4,
-                            width = width/4,
-                            height = height/1.4,
-                            color_min = min_color,
-                            color_max = max_color,
-                            r = r,
-                            min_color_data = min_color_data,
-                            max_color_data = max_color_data
-                            )
-    
-    TEXT(ctx,"petal_length",
-         x - width/15,
-         y + height/5,
-         width,
-         height,
-         250,
-         200,
-         "Sans",
-         (0,0,0))
+
+    if (style == "scifi"): 
+        scifi_block(ctx,x - width/10,y,width+0.5*width,height+0.3*height,color)
+        
+        draw_gradient_rectangle(ctx = ctx,
+                                x = x + width/15,
+                                y = y + height/4,
+                                width = width/4,
+                                height = height/1.4,
+                                color_min = min_color,
+                                color_max = max_color,
+                                r = r,
+                                min_color_data = min_color_data,
+                                max_color_data = max_color_data
+                                )
+        
+        TEXT(ctx,"petal_length",
+             x - width/15,
+             y + height/5,
+             width,
+             height,
+             15,
+             "Sans",
+             (0,0,0))
+
+    elif(style == "formal"):
+        draw_gradient_rectangle(ctx = ctx,
+                                x = x + width/15,
+                                y = y + height/6,
+                                width = width/6,
+                                height = height/1.4,
+                                color_min = min_color,
+                                color_max = max_color,
+                                r = r,
+                                min_color_data = min_color_data,
+                                max_color_data = max_color_data
+                                ) 
+
+
+
+        TEXT(ctx,"petal_length",
+             x - width/35,
+             y + height/7,
+             width,
+             height,
+             25,
+             "Sans",
+             (0,0,0))
+
 
 
 
@@ -284,7 +307,7 @@ def draw_gradient_rectangle(ctx, x, y, width, height, color_min, color_max,r,min
         if ((color_value > max_color_data) or (color_value < min_color_data)):
             continue
         value = formater(color_value)
-        TEXT(ctx,value,x+width+width/10,color_pix,width,height,80,200,"Sans",(0,0,0),origin="center_left")
+        TEXT(ctx,value,x+width+width/10,color_pix,width,height,10,"Sans",(0,0,0),origin="center_left")
 
 
 #---------------------------Sci-Fi-------------------------#
@@ -365,7 +388,7 @@ def scifi_block(cr,x,y,width,height,color):
     cr.set_source_rgba(*color,0.7)
     cr.fill()
 #--------------------------TEXT------------------------------#
-def TEXT(ctx,text,x,y,width,height,x_scale,y_scale,font,color,origin = "bottom_left"):
+def TEXT(ctx,text,x,y,width,height,scale,font,color,origin = "bottom_left"):
     
     ctx.save()
     #ctx.translate(x,y)
@@ -376,13 +399,14 @@ def TEXT(ctx,text,x,y,width,height,x_scale,y_scale,font,color,origin = "bottom_l
 
     # Proper scale (any number is fine)
     
+    
+    font_size =math.sqrt(width**2 + height**2)/scale
 
     ctx.set_source_rgb(*color)
     ctx.select_font_face(font, cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
-    ctx.set_font_size(20)
+    ctx.set_font_size(font_size)
     
     ctx.translate(x,y)
-    ctx.scale(width/x_scale,height/y_scale)
 
     ext = ctx.text_extents(text)
 
