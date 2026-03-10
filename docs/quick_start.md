@@ -4,6 +4,25 @@ The Quick Start section provides two scatter plot examples: one that uses a NumP
 
 ## Example 1
  ``` python
+import reyplot.plot as rlt 
+
+df = rlt.load_dataset("iris")
+
+rlt.chart(size=[600,480])
+
+rlt.scatter(data = df,
+            x = "sepal_width",
+            y = "sepal_length",
+            color_by = "petal_length",
+            )
+rlt.title("Iris Data")
+rlt.show()
+ ```
+ ![Quick Start Example 1](images/intro_example_1.svg)
+
+
+## Example 2
+ ``` python
 import reyplot as rp
 import numpy as np
 
@@ -27,7 +46,7 @@ chrt.show()
  ```
  ![Quick Start Example 1](images/sine.svg)
 
- ## Example 2
+ ## Example 3
  ``` python
 import reyplot as rp
 
