@@ -1,41 +1,30 @@
-# Background Image
-The `background_image` method currently supports only **2** parameter.
-
-- `path`
-- `blur`
 
 ---
 
-## `path`
 
-The `path` parameter accepts **str** directory of the image.
+# Background Image
 
-``` Python
-import reyplot as rp 
+ReyPlot allows you to place an image behind your plot, adding visual context or artistic flair. The image is stretched to fill the entire canvas and is applied to **both the inner and outer layers** (with the outer layer automatically masking the inner area).
 
-df = rp.load_dataset("iris")
+## Basic Usage
 
-iris = rp.chart()
+```python
+import reyplot as rp
 
-iris.scatter(data = df,
-             x = "sepal_width",
-             y = "sepal_length"
-             )
+fig = rp.chart()
+fig.background_image(path="image.jpg", blur=7)
+fig.scatter(data=df,x="sepal_width", y="sepal_length" , color= "maroon")
+rlt.chart(size=[600,480])
 
-iris.title("Iris Data")
-iris.background_image(path = "background.jpg")
+fig.show()
 
-iris.show()
+
 ```
+![Trigonometric functions plot](images/plot.jpg)
 
-![Background Image Example](images/background_image_example_1.svg)
+## blur
+The blur parameter accepts float values.
+The default value of ```blur``` is ```0```
 
-----
+The image is loaded using Pillow and scaled to match the chart’s dimensions. The ```blur``` parameter applies a Gaussian blur to the image, creating a soft background effect.
 
-## `blur`
-The `blur` parameter accepts **float** values.  
-The default value of `blur` is **0**
-
-``` Python
-iris.background_image(path = "background.jpg", blur = 3)
-```
