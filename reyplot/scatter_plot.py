@@ -1,0 +1,232 @@
+import cairo
+import math
+import polars as pl
+
+
+
+class _Draw_Simple_Scatter_():
+    def __init__(self,properties,context,width,height):
+        from .pixel_mapper import map_polars_to_pixels
+        from .canvas import calculate_dynamic_radius
+
+        self.properties = properties
+        self._ctx_ = context
+        self.width = width
+        self.height = height
+        
+
+        
+        self.x_pixels = map_polars_to_pixels(
+            self.properties.X_data,
+            self.properties.limits[0],
+            self.properties.limits[1],
+            self.properties.postions[0],
+            self.properties.postions[1]
+        )
+
+        
+        self.y_pixels = map_polars_to_pixels(
+            self.properties.Y_data,
+            self.properties.limits[2],
+            self.properties.limits[3],
+            self.properties.postions[2],
+            self.properties.postions[3]
+        )
+        
+        
+        dot_radius = calculate_dynamic_radius(self.width,self.height,len(self.x_pixels),self.properties.dot_size)
+        
+        if (self.properties.shadow):
+            from .canvas import shadow_scatter_num_num
+            shadow_scatter_num_num(self.x_pixels,self.y_pixels,self._ctx_,dot_radius,self.properties.shadow_radius,width,height)
+
+
+        if (self.properties.glow):
+            from .canvas import glow_scatter_num_num
+            glow_scatter_num_num(properties=properties , main_ctx= self._ctx_, width= self.width, height= self.height)
+
+        from .canvas import draw_hexagon, draw_circle, draw_diamond, draw_square, draw_triangle
+
+        for x , y in zip (self.x_pixels,self.y_pixels):
+            if (self.properties.dot_shape == "h"):
+                draw_hexagon(self._ctx_,
+                             x,
+                             y,
+                             dot_radius,
+                             color=self.properties.scatter_color,
+                             alpha=self.properties.alpha,
+                             glow_gradient=self.properties.glow_gradient)
+            elif(self.properties.dot_shape == "c"):
+                draw_circle(self._ctx_,
+                             x,
+                             y,
+                             dot_radius,
+                             color=self.properties.scatter_color,
+                             alpha=self.properties.alpha,
+                             glow_gradient=self.properties.glow_gradient)
+            elif(self.properties.dot_shape == "d"):
+                draw_diamond(self._ctx_,
+                             x,
+                             y,
+                             dot_radius,
+                             color=self.properties.scatter_color,
+                             alpha=self.properties.alpha,
+                             glow_gradient=self.properties.glow_gradient)
+            elif(self.properties.dot_shape == "s"):
+                draw_square(self._ctx_,
+                             x,
+                             y,
+                             dot_radius,
+                             color=self.properties.scatter_color,
+                             alpha=self.properties.alpha,
+                             glow_gradient=self.properties.glow_gradient)
+            elif(self.properties.dot_shape == "t"):
+                draw_triangle(self._ctx_,
+                             x,
+                             y,
+                             dot_radius,
+                             color=self.properties.scatter_color,
+                             alpha=self.properties.alpha,
+                             glow_gradient=self.properties.glow_gradient)
+            else:
+                self._ctx_.arc(x , y , dot_radius , 0, 2 * math.pi)
+                if (self.properties.glow_gradient):
+                    pat = cairo.RadialGradient(x,
+                                        
+                                            y,
+
+                                            dot_radius/2,
+                                        
+                                            x,
+
+                                            y,
+
+                                            dot_radius*2)
+
+                    pat.add_color_stop_rgba(0,
+                                            1,
+                                            1,
+                                            1,
+                                            1)
+
+                    pat.add_color_stop_rgba(1,
+                                            *self.properties.scatter_color,
+                                            1)
+
+                    self._ctx_.set_source(pat)
+                
+                else:
+                    self._ctx_.set_source_rgba(self.properties.scatter_color[0],
+                                        self.properties.scatter_color[1],
+                                        self.properties.scatter_color[2],
+                                        self.properties.alpha)    
+                    
+                self._ctx_.fill_preserve()
+
+
+            if (self.properties.stroke):
+                self._ctx_.set_line_width(self.properties.stroke_size)
+                self._ctx_.set_source_rgb(self.properties.scatter_color[0],
+                                            self.properties.scatter_color[1],
+                                            self.properties.scatter_color[2]
+                                            )
+            self._ctx_.stroke()
+
+
+
+
+
+
+
+class Draw_scatter_num_num:
+     def __init__(self,properties,context,width,height):
+        from .pixel_mapper import map_polars_to_pixels
+        from .canvas import calculate_dynamic_radius
+        from .canvas import single_scatter_num_num
+        from .color_mapper import map_color
+        from .size_mapper import map_size
+
+        self.properties = properties
+        self._ctx_ = context
+        self.width = width
+        self.height = height
+
+        
+        self.x_pixels = map_polars_to_pixels(
+            self.properties.X_data,
+            self.properties.limits[0],
+            self.properties.limits[1],
+            self.properties.postions[0],
+            self.properties.postions[1]
+        )
+
+        
+        self.y_pixels = map_polars_to_pixels(
+            self.properties.Y_data,
+            self.properties.limits[2],
+            self.properties.limits[3],
+            self.properties.postions[2],
+            self.properties.postions[3]
+        )
+        
+        
+        dot_radius = calculate_dynamic_radius(self.width,self.height,len(self.x_pixels),self.properties.dot_size)
+        
+
+        # Mapping the Color 
+        if (self.properties.color_by):
+            self.min_color_data = self.properties.color_by_data.min()
+            self.max_color_data = self.properties.color_by_data.max()
+
+
+            red, green, blue = map_color(self.properties.color_by_data,
+                                  self.min_color_data,
+                                  self.max_color_data,
+                                  self.properties.color_range_min,
+                                  self.properties.color_range_max
+                                  )
+        else:
+            red =pl.Series([self.properties.scatter_color[0]] * len(self.x_pixels))
+            green = pl.Series([self.properties.scatter_color[1]] * len(self.x_pixels))
+            blue = pl.Series([self.properties.scatter_color[2]] * len(self.x_pixels))
+
+
+
+        # Mapping the size_mapper
+        if (self.properties.size_by):
+            self.min_size_data = self.properties.size_by_data.min()
+            self.max_size_data = self.properties.size_by_data.max()
+            
+            dot_radius_min = calculate_dynamic_radius(self.width,self.height,len(self.x_pixels),self.properties.size_range_min)
+            dot_radius_max = calculate_dynamic_radius(self.width,self.height,len(self.x_pixels),self.properties.size_range_max)
+        
+ 
+
+
+            size = map_size(value = self.properties.size_by_data,
+                            data_min = self.min_size_data,
+                            data_max = self.max_size_data,
+                            size_min = dot_radius_min,
+                            size_max = dot_radius_max
+                            )
+        else:
+            size = pl.Series([dot_radius] * len(self.x_pixels))
+
+
+
+        for x , y , r , g , b, s in zip (self.x_pixels,self.y_pixels, red, green, blue, size):
+
+
+            single_scatter_num_num(self._ctx_,
+                                   x,
+                                   y,
+                                   s,
+                                   "c2",
+                                   self.width,
+                                   self.height,
+                                   False,
+                                   self.properties.shadow_radius,
+                                   (r,g,b),
+                                   self.properties.alpha,
+                                   self.properties.glow 
+                                   )
