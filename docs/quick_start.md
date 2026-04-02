@@ -1,9 +1,14 @@
-# Quick Start with ReyPlot
+# Quick Start
 
-The Quick Start section provides two scatter plot examples: one that uses a NumPy array to plot a sine wave, and another that visualizes the Iris dataset. These examples demonstrate that ReyPlot supports both raw numerical data and structured datasets, similar to combining the flexibility of Matplotlib with the simplicity of Seaborn.
+Get started with ReyPlot in just a few lines of code. This guide shows you how to create basic scatter plots using both raw numerical data and built‑in datasets. The examples demonstrate that ReyPlot supports both raw numerical data and structured datasets, combining the flexibility of Matplotlib with the simplicity of Seaborn.
 
-## Example 1
- ``` python
+---
+
+## 1. Create a Simple Scatter Plot with NumPy
+
+This example loads the Iris dataset and creates a scatter plot of sepal width vs. sepal length. The points are colored according to the sepal length value, creating a gradient from blue to red. 
+
+```python
 import reyplot.plot as rlt 
 
 df = rlt.load_dataset("iris")
@@ -11,54 +16,23 @@ df = rlt.load_dataset("iris")
 rlt.chart(size=[600,480])
 
 rlt.scatter(data = df,
-            x = "sepal_width",
-            y = "sepal_length",
-            color_by = "petal_length",
-            )
+           x = "sepal_width",
+           y = "sepal_length",
+           color_by = "sepal_length",
+           color_range = ("blue","red")
+           )
 rlt.title("Iris Data")
 rlt.show()
- ```
- ![Quick Start Example 1](images/intro_example_1.svg)
 
 
-## Example 2
- ``` python
-import reyplot as rp
-import numpy as np
 
-x = np.linspace(0,2*np.pi,50)
-y1 = np.sin(x)
-y2 = np.cos(x)
+``` 
+![Trigonometric functions plot](images/blue and red plot.png)
 
-chrt = rp.chart()
 
-chrt.scatter(x = x , y = y1)
 
-chrt.scatter(x = x , y = y2)
+!!! tip
+To save the figure instead of displaying it, replace ```rlt.show()``` with:
 
-chrt.x_title(x_title="X_Data")
-
-chrt.y_title(y_title="sin(x) and cos(x)")
-
-chrt.title(title="Trig Functions")
-
-chrt.show()
- ```
- ![Quick Start Example 1](images/sine.svg)
-
- ## Example 3
- ``` python
-import reyplot as rp
-
-data_set = rp.load_dataset("iris")
-
-chrt = rp.chart()
-
-chrt.scatter(data = data_set ,x = "sepal_width", y = "petal_width")
-
-chrt.title(title="Iris Data")
-
-chrt.show()
- ```
-
-![Quick Start Example 2](images/iris.svg)
+```rlt.save("iris_scatter_plot.png")```
+You can also specify ```filetype="jpg" ```.
